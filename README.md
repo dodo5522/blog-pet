@@ -1,81 +1,24 @@
-# Personal Tech Blog / 個人技術ブログ
+# blog-pet
 
-Astro ベースの個人技術ブログです。コンテンツ管理に Sanity、配信に AWS S3 + CloudFront を使用します。
+ペットシッターの活動報告とサービス案内を掲載する静的サイトです。
 
-詳細は以下を参照してください。
+## 構成
 
-- `AGENTS.md`
-- `CONTRIBUTING.md`
-- `docs/PRODUCT_REQUIREMENTS.md`
-- `docs/ARCHITECTURE.md`
-- `docs/CONTENT_MODEL.md`
-- `docs/DEPLOYMENT.md`
-- `docs/RELEASE_CHECKLIST.md`
-- `docs/OPERATIONS.md`
-- `docs/DECISIONS.md`
+- 公開サイト: Astro
+- コンテンツ管理: Sanity Studio
+- 配信: AWS S3 + CloudFront
+- 自動化: GitHub Actions
 
-## 採用スタック
+公開サイトは Sanity の公開済みコンテンツをビルド時に取得します。独自バックエンドや閲覧者アカウントは持ちません。
 
-- Astro
-- Sanity
-- AWS S3
-- AWS CloudFront
-- GitHub Actions
-
-## 現在の状態
-
-Astro サイト、Sanity Studio スキーマ、CI/CD の最小構成まで実装済みです。  
-既存の AWS リソース（S3 / CloudFront / ドメイン / 証明書）を使った本番デプロイ接続確認済みです。
-
-## セットアップ
+## 開発
 
 ```bash
 pnpm install
 pnpm dev
-```
-
-Sanity Studio のローカル起動:
-
-```bash
 pnpm sanity:dev
 ```
 
-Markdown パッケージを Sanity Draft として取り込む:
+環境変数は `env.example` を参照してください。ローカルでは `SANITY_FALLBACK_MODE=auto` で画面確認できます。本番では `SANITY_FALLBACK_MODE=never` を使い、フォールバックデータを公開しません。
 
-```bash
-pnpm sanity:import-draft -- --source tmp/<package-dir> --dry-run
-pnpm sanity:import-draft -- --source tmp/<package-dir> --slug pve-gpu-passthrough-linux-desktop
-```
-
-この import は `article.md` と `images/` を読み取り、Sanity の Draft document と画像 asset を作成します。書き込みには `SANITY_WRITE_TOKEN` が必要です。
-
-環境変数は `env.example` を参照してください。Sanity の接続情報が未設定でも、`SANITY_FALLBACK_MODE=auto` の既定動作によりフォールバックコンテンツで Astro 側の画面確認はできます。Sanity 接続済みの状態で固定 fallback 記事だけを確認する場合は、一時的に `SANITY_FALLBACK_MODE=always` を使います。
-
-`SANITY_FALLBACK_MODE=always` は `src/lib/content/fallback.ts` の固定データを使う設定です。`tmp/` 配下の記事パッケージは Astro 側から直接読まないため、記事として表示するには `pnpm sanity:import-draft` で Sanity Draft を作成し、Studio で publish してください。
-
-## 本番デプロイ最短手順（既存AWSリソース利用）
-
-1. GitHub Repository Variables を設定
-   - `PUBLIC_SITE_URL`
-   - `AWS_REGION`
-   - `S3_BUCKET_NAME`
-   - `CLOUDFRONT_DISTRIBUTION_ID`
-   - `SANITY_DATASET`
-   - `SANITY_API_VERSION`
-   - `SANITY_FALLBACK_MODE` = `never`
-2. GitHub Repository Secrets を設定
-   - `SANITY_PROJECT_ID`
-   - `SANITY_READ_TOKEN`
-   - `AWS_DEPLOY_ROLE_ARN`
-3. `AWS_DEPLOY_ROLE_ARN` の IAM Role は GitHub OIDC を trust し、`main` ブランチの `repo` クレームだけを許可する
-4. GitHub Actions の `Deploy Site` workflow を `workflow_dispatch` で手動実行し、`Configure AWS credentials` / `s3 sync` / `create-invalidation` の成功を確認する
-5. CloudFront 経由で公開サイト表示を確認する
-
-Studio 配信に必要な Repository Variables:
-
-- `TF_STATE_BUCKET_NAME`
-- `TF_STATE_KEY`
-- `TF_STATE_REGION`
-
-開発を進める際は、まず `AGENTS.md`、関連する `docs/*`、`CONTRIBUTING.md` を確認してください。
-実装は短命ブランチで行い、Pull Request 経由で `main` に統合します。
+要件と設計は `docs/superpowers/specs/2026-10-12-blog-pet-design.md` にあります。実装は GitHub Issue ごとに短命ブランチと Pull Request で進めます。
