@@ -35,54 +35,24 @@
 | --- | --- |
 | `package.json`, `pnpm-lock.yaml` | Package identity and supported commands. |
 | `sanity/sanity.config.ts` | Studio display identity. |
-| `tests/product-identity.test.mjs` | Dependency-free regression checks for this Issue. |
 | `README.md`, `AGENTS.md` | Setup, mission, scope, and contributor workflow. |
 | `docs/{PRODUCT_REQUIREMENTS,ARCHITECTURE,CONTENT_MODEL,DEPLOYMENT,OPERATIONS,RELEASE_CHECKLIST,DECISIONS}.md` | Product-aligned requirements and operating guidance. |
 | `scripts/import-draft-post.ts`, `tests/fixtures/writing/`, technical-writing configuration, `.agents/skills/` technical article skills | Retired technical-article artifacts. |
 
-### Task 1: Add product-identity regression checks
+### Task 1: Record the imported-project verification baseline
 
 **Files:**
-- Create: `tests/product-identity.test.mjs`
-- Modify: `package.json`
+- Test: `package.json`, `sanity/sanity.config.ts`, `README.md`, `AGENTS.md`, `src/lib/content/api.ts`
 
 **Interfaces:**
-- Consumes: Node built-ins `node:test`, `node:assert/strict`, and `node:fs`.
-- Produces: `pnpm test:product-identity`.
+- Consumes: existing `pnpm lint`, `pnpm build`, and `pnpm sanity:build` commands.
+- Produces: baseline verification evidence for the configuration and documentation changes in later tasks.
 
-- [ ] **Step 1: Write the failing Node test**
+- [ ] **Step 1: Run the imported-project baseline suite**
 
-Create tests named `uses the blog-pet package and Studio identity`, `does not expose retired technical-article commands`, and `identifies the product as a pet-sitter service in contributor entry points`. Assert:
+Run: `pnpm lint && pnpm build`
 
-~~~js
-assert.equal(packageJson.name, "blog-pet");
-assert.match(sanityConfig, /title: "blog-pet Studio"/);
-assert.equal("sanity:import-draft" in packageJson.scripts, false);
-assert.doesNotMatch(readme + agents, /個人向け技術ブログ|Personal Tech Blog/);
-~~~
-
-- [ ] **Step 2: Run the test to verify it fails**
-
-Run: `node --test tests/product-identity.test.mjs`
-
-Expected: FAIL because the imported project still has the blog-tech identity.
-
-- [ ] **Step 3: Add the focused package script**
-
-Add `"test:product-identity": "node --test tests/product-identity.test.mjs"` to `package.json`. Do not add a test framework dependency.
-
-- [ ] **Step 4: Verify the test command**
-
-Run: `pnpm test:product-identity`
-
-Expected: FAIL on product-identity assertions, while the command itself resolves through pnpm.
-
-- [ ] **Step 5: Commit**
-
-~~~bash
-git add package.json tests/product-identity.test.mjs
-git commit -m "test: add blog-pet product identity checks"
-~~~
+Expected: PASS before product-specific edits. This task deliberately adds no automated text-based test: package metadata and human-facing prose have no independently observable behavior beyond the build and Studio commands they configure.
 
 ### Task 2: Rename configuration and remove technical-only tooling
 
@@ -99,10 +69,9 @@ git commit -m "test: add blog-pet product identity checks"
 - Delete: `prh.yml`
 - Delete: `.agents/skills/chatgpt-share-to-sanity-draft/`
 - Delete: `.agents/skills/writing-blog-tech-articles/`
-- Test: `tests/product-identity.test.mjs`
 
 **Interfaces:**
-- Consumes: Task 1 command and existing `pnpm lint`, `pnpm build`, and `pnpm sanity:build`.
+- Consumes: the baseline commands from Task 1.
 - Produces: a `blog-pet` package with only supported developer workflows.
 
 - [ ] **Step 1: Update package and Studio identities**
@@ -125,7 +94,7 @@ Expected: `pnpm-lock.yaml` no longer resolves the removed technical-writing-only
 
 - [ ] **Step 5: Verify configuration and builds**
 
-Run: `pnpm test:product-identity && pnpm lint && pnpm build && pnpm sanity:build`
+Run: `pnpm lint && pnpm build && pnpm sanity:build`
 
 Expected: PASS. The Astro build may use fallback content in local `auto` mode; the Studio build loads with its renamed title.
 
@@ -148,7 +117,6 @@ git commit -m "chore: initialize blog-pet project identity"
 - Modify: `docs/OPERATIONS.md`
 - Modify: `docs/RELEASE_CHECKLIST.md`
 - Modify: `docs/DECISIONS.md`
-- Modify: `tests/product-identity.test.mjs`
 
 **Interfaces:**
 - Consumes: the approved design specification.
@@ -166,20 +134,16 @@ In `PRODUCT_REQUIREMENTS.md` and `ARCHITECTURE.md`, replace technical-blog audie
 
 Replace technical article import, code-block, ChatGPT-share, and Content Agent instructions with Sanity-based activity-report and service-page guidance. Keep deployment architecture and environment keys, but remove unverified claims of a completed production connection. In `DECISIONS.md`, record adopting blog-tech as the foundation and removing technical-writing tooling.
 
-- [ ] **Step 4: Extend the identity test**
+- [ ] **Step 4: Verify documentation and static build**
 
-Assert that the deleted import script, technical-writing configuration, fixture directory, and retired skill directories do not exist. Do not encode future CMS schema or routes in this foundation test.
+Run: `pnpm format:check && pnpm lint && pnpm build`
 
-- [ ] **Step 5: Verify documentation and static build**
+Expected: PASS. Inspect the changed command list and deleted paths in the pull-request diff; no supported command or tracked local skill should advertise the retired technical-article flow.
 
-Run: `pnpm test:product-identity && pnpm format:check && pnpm lint && pnpm build`
-
-Expected: PASS. No supported command or tracked local skill advertises the retired technical-article flow.
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 5: Commit**
 
 ~~~bash
-git add README.md AGENTS.md docs tests/product-identity.test.mjs
+git add README.md AGENTS.md docs
 git commit -m "docs: align foundation with pet-sitter service"
 ~~~
 
@@ -187,7 +151,6 @@ git commit -m "docs: align foundation with pet-sitter service"
 
 **Files:**
 - Modify: `docs/RELEASE_CHECKLIST.md`
-- Test: `tests/product-identity.test.mjs`
 
 **Interfaces:**
 - Consumes: `src/lib/content/api.ts` fallback behavior and the deployment workflow.
@@ -209,7 +172,7 @@ Expected: FAIL with `Sanity is not configured and fallback content is disabled.`
 
 - [ ] **Step 3: Run the final Issue #2 suite**
 
-Run: `pnpm test:product-identity && pnpm format:check && pnpm lint && pnpm build && pnpm sanity:build`
+Run: `pnpm format:check && pnpm lint && pnpm build && pnpm sanity:build`
 
 Expected: PASS. Record the intentional production-fallback failure from Step 2 in the pull request description.
 
@@ -224,7 +187,7 @@ git commit -m "docs: add production fallback verification"
 
 - **Spec coverage:** Preserves static architecture and production fallback safety; removes technical-blog identity and tooling; defers new CMS models and service pages to #3 and #4.
 - **Step scan:** Each step names the relevant files, command, and expected result.
-- **Type consistency:** The sole new interface is `test:product-identity`, introduced in Task 1 and used by later tasks.
-- **Review Focus:** Task 2 validates static and Studio builds; Task 3 validates retired workflows and documentation; Task 4 validates both fallback modes.
+- **Type consistency:** This Issue introduces no application interface; it preserves the existing build and Studio commands.
+- **Review Focus:** Task 2 validates static and Studio builds; Task 3 validates retired workflows and documentation through reviewable diffs; Task 4 validates both fallback modes.
 - **Proportion:** Four independently reviewable tasks complete one foundation Issue without pre-implementing later Issues.
 
