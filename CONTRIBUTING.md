@@ -114,23 +114,11 @@
 
 `README.md` は入口文書として保ち、詳細手順は個別文書へ寄せる。
 
-## 技術記事の執筆と校正
+## コンテンツ編集
 
-日本語記事の設計と推敲には `.agents/skills/natural-japanese` を `tech` ジャンルで使う。blog-tech固有の編集基準とSanityへの受け渡し条件は `.agents/skills/writing-blog-tech-articles` に従う。ChatGPT共有会話を素材にする場合は `.agents/skills/chatgpt-share-to-sanity-draft` も使う。
+投稿と固定ページの編集は Sanity Studio で行う。公開内容はペットシッターのサービス案内と活動報告に限定し、個別のペットのカルテや顧客情報は登録しない。
 
-`natural-japanese` の検査スクリプトにはuvを使う。mise利用時はリポジトリルートで `mise install` を実行する。
-
-記事パッケージをSanityへ取り込む前に、Markdown本文を検査する。
-
-```bash
-pnpm lint:content -- tmp/<slug>/article.md
-pnpm lint:markdown -- tmp/<slug>/article.md
-uv run .agents/skills/natural-japanese/scripts/lint.py --genre tech --reading-load tmp/<slug>/article.md
-uv run .agents/skills/natural-japanese/scripts/terms.py tmp/<slug>/article.md
-pnpm sanity:import-draft -- --source tmp/<slug> --dry-run
-```
-
-textlintは技術文書の読みやすさと `prh.yml` の表記統一を検査する。markdownlintはMarkdown構造を検査する。`natural-japanese` の指摘は文脈判断の材料であり、技術的な意味を変えてまで機械的に直さない。
+Sanity のスキーマと公開ページは後続 Issue で整備する。編集フロー、公開確認、画像の扱いは実装に合わせて更新する。
 
 ---
 
@@ -150,6 +138,7 @@ textlintは技術文書の読みやすさと `prh.yml` の表記統一を検査�
 PR を Ready for Review にする前に、少なくとも以下を確認する。
 
 - ローカル build が成功する
+- Sanity Studio build が成功する
 - 主要ページまたは主要機能の動作を確認した
 - 新規環境変数がある場合は `env.example` と関連 docs を更新した
 - 公開ページに秘密情報が含まれない
