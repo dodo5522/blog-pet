@@ -192,4 +192,3 @@ Review correction: The initial documentation pass compressed existing repository
 - **Type consistency:** This Issue introduces no application interface; it preserves the existing build and Studio commands.
 - **Review Focus:** Task 2 validates static and Studio builds; Task 3 validates retired workflows and documentation through reviewable diffs; Task 4 validates both fallback modes.
 - **Proportion:** Four independently reviewable tasks complete one foundation Issue without pre-implementing later Issues.
-
