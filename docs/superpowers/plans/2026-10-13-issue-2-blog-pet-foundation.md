@@ -122,9 +122,9 @@ git commit -m "chore: initialize blog-pet project identity"
 - Consumes: the approved design specification.
 - Produces: product documentation that directs schema work to #3 and page work to #4.
 
-- [ ] **Step 1: Rewrite top-level guidance**
+- [ ] **Step 1: Adapt top-level guidance**
 
-Update `README.md` and `AGENTS.md` to state that blog-pet serves prospective pet-sitting clients through service information and activity reports. Preserve the fixed architecture and GitHub Issue / short-lived branch workflow.
+Update the product identity in `README.md` and `AGENTS.md` while retaining their setup, architecture, quality, security, and GitHub Issue / short-lived branch guidance.
 
 - [ ] **Step 2: Align requirements and architecture**
 
@@ -185,7 +185,7 @@ git commit -m "docs: add production fallback verification"
 
 ## Plan Self-Review
 
-Review correction: The initial documentation pass compressed established deployment and operations procedures. The final pass restores those procedures from `origin/main` and limits their edits to blog-pet terminology and retired technical-article tooling. This amendment follows the user's architecture-preservation feedback on PR #7.
+Review correction: The initial documentation pass compressed existing repository guidance and operating procedures. The final pass restores them from `origin/main` and limits edits to blog-pet requirements, accurate current-state notes, and retired technical-article tooling. This amendment follows the user's architecture-preservation feedback on PR #7.
 
 - **Spec coverage:** Preserves static architecture and production fallback safety; removes technical-blog identity and tooling; defers new CMS models and service pages to #3 and #4.
 - **Step scan:** Each step names the relevant files, command, and expected result.

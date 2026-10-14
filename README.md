@@ -1,32 +1,71 @@
 # blog-pet
 
-ペットシッターの活動報告とサービス案内を掲載する静的サイトです。
+ペットシッターのサービス案内と活動報告を掲載する Astro ベースの静的サイトです。コンテンツ管理に Sanity、配信に AWS S3 + CloudFront を使用します。
 
-## 構成
+詳細は以下を参照してください。
 
-- 公開サイト: Astro
-- コンテンツ管理: Sanity Studio
-- 配信: AWS S3 + CloudFront
-- 自動化: GitHub Actions
+- `AGENTS.md`
+- `CONTRIBUTING.md`
+- `docs/PRODUCT_REQUIREMENTS.md`
+- `docs/ARCHITECTURE.md`
+- `docs/CONTENT_MODEL.md`
+- `docs/DEPLOYMENT.md`
+- `docs/RELEASE_CHECKLIST.md`
+- `docs/OPERATIONS.md`
+- `docs/DECISIONS.md`
 
-公開サイトは Sanity の公開済みコンテンツをビルド時に取得します。独自バックエンドや閲覧者アカウントは持ちません。
+## 採用スタック
 
-## 開発
+- Astro
+- Sanity
+- AWS S3
+- AWS CloudFront
+- GitHub Actions
+
+## 現在の状態
+
+Astro サイト、Sanity Studio スキーマ、CI/CD は blog-tech の実装を引き継いでいます。blog-pet 向けのスキーマとページは #3、#4、AWS と Sanity への接続確認は #6 で行います。
+
+## セットアップ
 
 ```bash
 pnpm install
 pnpm dev
+```
+
+Sanity Studio のローカル起動:
+
+```bash
 pnpm sanity:dev
 ```
 
-環境変数は `env.example` を参照してください。ローカルでは `SANITY_FALLBACK_MODE=auto` で画面確認できます。本番では `SANITY_FALLBACK_MODE=never` を使い、フォールバックデータを公開しません。
+環境変数は `env.example` を参照してください。Sanity の接続情報が未設定でも、`SANITY_FALLBACK_MODE=auto` の既定動作によりフォールバックコンテンツで Astro 側の画面確認はできます。Sanity 接続済みの状態で固定 fallback 記事だけを確認する場合は、一時的に `SANITY_FALLBACK_MODE=always` を使います。
 
-## デプロイ
+`SANITY_FALLBACK_MODE=always` は `src/lib/content/fallback.ts` の固定データを使う設定です。本番の `Deploy Site` workflow は `never` に固定しています。
 
-公開サイトと Sanity Studio は、それぞれ `Deploy Site`、`Deploy Studio` workflow でビルドして S3 に配置し、CloudFront から配信します。Sanity の publish / unpublish は webhook 経由で Site の再デプロイを起動します。
+## 本番デプロイの設定（#6 で接続確認）
 
-GitHub の Variables に `PUBLIC_SITE_URL`、`AWS_REGION`、`S3_BUCKET_NAME`、`CLOUDFRONT_DISTRIBUTION_ID`、`SANITY_DATASET`、`SANITY_API_VERSION`、Studio 用の `TF_STATE_BUCKET_NAME` と `TF_STATE_KEY` を設定します。Secrets は `SANITY_PROJECT_ID`、必要に応じた `SANITY_READ_TOKEN`、GitHub OIDC 用の `AWS_DEPLOY_ROLE_ARN` です。Terraform の適用と Studio 配信先の確認を含む手順は `docs/DEPLOYMENT.md` を参照してください。blog-pet の AWS と Sanity への接続検証は #6 で行います。
+1. GitHub Repository Variables を設定
+   - `PUBLIC_SITE_URL`
+   - `AWS_REGION`
+   - `S3_BUCKET_NAME`
+   - `CLOUDFRONT_DISTRIBUTION_ID`
+   - `SANITY_DATASET`
+   - `SANITY_API_VERSION`
+2. GitHub Repository Secrets を設定
+   - `SANITY_PROJECT_ID`
+   - `SANITY_READ_TOKEN`
+   - `AWS_DEPLOY_ROLE_ARN`
+3. `AWS_DEPLOY_ROLE_ARN` の IAM Role は GitHub OIDC を trust し、`main` ブランチの `repo` クレームだけを許可する
+4. GitHub Actions の `Deploy Site` workflow を `workflow_dispatch` で手動実行し、`Configure AWS credentials` / `s3 sync` / `create-invalidation` の成功を確認する
+5. CloudFront 経由で公開サイト表示を確認する
 
-`AGENTS.md`、`CONTRIBUTING.md`、`docs/` 配下の文書には、開発方針と運用手順を記載しています。
+Studio 配信に必要な Repository Variables:
 
-要件と設計は `docs/superpowers/specs/2026-10-12-blog-pet-design.md` にあります。実装は GitHub Issue ごとに短命ブランチと Pull Request で進めます。
+- `TF_STATE_BUCKET_NAME`
+- `TF_STATE_KEY`
+
+Terraform state のリージョンには `AWS_REGION` を使用します。初回の Terraform 適用、Sanity webhook、Studio 配信先の確認は `docs/DEPLOYMENT.md` を参照してください。
+
+開発を進める際は、まず `AGENTS.md`、関連する `docs/*`、`CONTRIBUTING.md` を確認してください。
+実装は短命ブランチで行い、Pull Request 経由で `main` に統合します。

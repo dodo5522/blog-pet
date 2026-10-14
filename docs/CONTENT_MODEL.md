@@ -1,19 +1,104 @@
 # CONTENT_MODEL.md
 
-## 方針
+## 概要
 
-Sanity のモデルは、ペットシッターの活動報告とサービス案内に必要な最小構成に絞ります。#3 で実装します。
+以下は blog-tech から引き継いだ現在の Sanity スキーマです。#3 で Post の記事分類を Category に変更し、Author を Staff に移行して、Service page と問い合わせ先の設定を追加します。移行後の設計は `docs/superpowers/specs/2026-10-12-blog-pet-design.md` を参照してください。
 
-| モデル | 用途 |
-| --- | --- |
-| Post | 活動報告、お知らせ、お世話のヒント |
-| Category | お仕事、日記、お知らせなどの記事分類 |
-| Staff | スタッフ紹介 |
-| Service page | ご利用方法、料金、アクセス・対応エリア、お問い合わせ |
-| Site settings | サイト名、URL、既定 SEO、SNS、問い合わせ先 |
+---
 
-記事は title、slug、excerpt、Portable Text の body、公開日時、更新日時、カバー画像、カテゴリー、SEO項目を持ちます。slug は一意にし、公開記事には公開日時を必須とします。画像には可能な限り代替テキストを設定します。
+## 1. Post
 
-Site settings は単一ドキュメントとし、サイト名、補足文、URL、既定の SEO 情報、OGP 画像、SNS、問い合わせ先を扱います。本番ビルドでは公開済みコンテンツのみ取得し、preview は MVP の必須要件に含めません。
+必須フィールド:
 
-個々のペットをカルテとして管理する機能は MVP に含めません。各フィールドの詳細と既存スキーマからの移行は #3 で定めます。
+- `title`: string
+- `slug`: slug
+- `excerpt`: text
+- `body`: portable text
+- `publishedAt`: datetime
+- `updatedAt`: datetime
+- `coverImage`: image
+- `tags`: tag 参照の配列
+- `author`: author 参照
+- `seoTitle`: string
+- `seoDescription`: text
+- `ogImage`: image（任意）
+
+ルール:
+
+- slug は一意
+- title 必須
+- body 必須
+- 公開記事には publishedAt 必須
+- excerpt の長さには適切な上限を設ける
+
+---
+
+## 2. Tag
+
+フィールド:
+
+- `name`: string
+- `slug`: slug
+- `description`: text（任意）
+
+ルール:
+
+- slug は一意
+- name 必須
+
+---
+
+## 3. Author
+
+フィールド:
+
+- `name`: string
+- `slug`: slug（任意）
+- `bio`: text（任意）
+- `avatar`: image（任意）
+- `links`: 配列（任意）
+
+MVP では著者モデルを過剰に複雑化しない。
+
+---
+
+## 4. Site settings
+
+単一ドキュメントで管理する。
+
+- `siteTitle`
+- `siteTagline`（任意、最大80文字。未設定時は既定文言を表示）
+- `siteUrl`
+- `defaultSeoTitle`
+- `defaultSeoDescription`
+- `defaultOgImage`
+- `socialLinks`
+
+---
+
+## 5. Draft の扱い
+
+- 本番ビルドでは公開済みコンテンツのみ取得する
+- preview は任意。MVP では必須ではない
+
+---
+
+## 6. 編集上の注意
+
+- 本文は Portable Text を基本とする
+- コードブロックを扱えるようにする
+- cover / OGP / 本文中の画像には可能な限り alt を持たせる
+- MVP ではカスタムブロックを増やしすぎない
+
+## 7. 実装済みの補助オブジェクト
+
+- `codeBlock`
+  - `filename`
+  - `language`
+  - `code`
+- `imageWithAlt`
+  - 画像本体
+  - `alt`
+- `socialLink`
+  - `label`
+  - `url`

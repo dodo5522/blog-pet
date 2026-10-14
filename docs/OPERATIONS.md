@@ -19,12 +19,14 @@ blog-tech から引き継ぐ運用手順を記録する。コンテンツモデ�
 3. Publish する
 4. デプロイ結果を確認する
 
-### カテゴリーを追加する（#3、#4 で導入）
+### タグを追加する（現行実装）
 
-1. Category を作成する
+1. Tag を作成する
 2. Publish する
 3. 記事に紐付ける
-4. カテゴリーページを確認する
+4. タグページを確認する
+
+カテゴリーへの移行は #3、カテゴリーページの公開は #4 で行う。
 
 ### コンテンツ publish 後の確認
 
@@ -46,7 +48,7 @@ Sanity Studio の依存関係やスキーマを更新した場合は、デプロ
 
 1. `Deploy Studio` と CloudFront invalidation の完了を確認する
 2. Sanity にログインしたブラウザで、CloudFront 経由のデプロイ済み Studio を一度開く
-3. Post、Category、Staff、Site settings が通常どおり表示されることを確認する（#3 のモデル移行後）
+3. Post、Tag、Author、Site settings が通常どおり表示されることを確認する（#3 のモデル移行後は Category、Staff を確認する）
 4. Sanity Dashboard の Content Agent を開き、対象 project/dataset のスキーマを認識できることを確認する
 
 Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリは `sanity` と `@sanity/vision` を 5.31.2 に固定している。Studio を開く操作は、デプロイ済みスキーマを Sanity 側へ登録するために必要であり、CI だけでは代替しない。
@@ -62,7 +64,7 @@ Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリ�
 
 ### 活動報告の表示確認
 
-1. 記事詳細で見出し、本文余白、リスト、画像キャプションが崩れていないことを確認する
+1. 記事詳細で見出し、本文余白、リスト、コードブロック、画像キャプションが崩れていないことを確認する
 2. 記事ページの HTML で `og:type=article`、`og:image`、`twitter:card`、canonical URL が意図通りであることを確認する
 3. OGP 画像は記事の `ogImage` を優先し、未設定なら `coverImage`、それも未設定なら Site Settings の `defaultOgImage` を使う
 4. Sanity 接続済みの状態で固定 fallback 記事の表示確認をする場合だけ、ローカルで `SANITY_FALLBACK_MODE=always` を使う
