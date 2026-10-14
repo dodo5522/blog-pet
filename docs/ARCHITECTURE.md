@@ -1,19 +1,137 @@
 # ARCHITECTURE.md
 
-## 採用構成
+## 1. 採用アーキテクチャ
 
 **Astro + Sanity + GitHub Actions + S3 + CloudFront**
 
+### コンテンツの流れ
+
+1. 編集者が Sanity Studio で活動報告やサービス案内を公開する
+2. webhook またはコード変更を契機に CI が起動する
+3. CI が Sanity の公開済みコンテンツを取得して Astro をビルドする
+4. 生成された静的ファイルを S3 に配置する
+5. CloudFront がサイトを配信する
+6. 必要に応じて CloudFront キャッシュを無効化する
+
+---
+
+## 2. この構成を採用する理由
+
+- 静的配信は安くて速い
+- Sanity により独自バックエンド DB が不要
+- Astro はコンテンツ中心サイトに向いている
+- ビルド時取得により本番構成が単純になる
+- S3 + CloudFront でアプリサーバ運用が不要になる
+
+---
+
+## 3. 実行境界
+
+### Sanity
+
+コンテンツ作成と保存の責務を持つ。
+
+### Astro build
+
+Sanity からコンテンツを取得し、静的ページを生成する。
+
+### S3 / CloudFront
+
+静的ファイルの配信のみを担当する。
+
+MVP では公開サイト用の実行時アプリケーションサーバは存在しない。
+
+---
+
+## 4. 主要判断
+
+- Sanity からの取得はビルド時に行う
+- 本番では公開済みコンテンツのみ使う
+- 公開ルートは静的生成する
+- デプロイは CI/CD 経由で行い、AWS コンソール手作業に依存しない
+- 管理画面は Sanity Studio を利用する
+
+---
+
+## 5. ルーティング案
+
+- `/`
+- `/usage/`
+- `/price/`
+- `/staff/`
+- `/blog/`
+- `/blog/[slug]/`
+- `/categories/`
+- `/categories/[slug]/`
+- `/access/`
+- `/contact/`
+- `/rss.xml`
+- `/sitemap-index.xml`
+- `/robots.txt`
+
+ペットシッター向けのページとコンテンツモデルへの移行は #3、#4 で行う。現時点の Astro と Sanity の実装には blog-tech のルートが残る。
+
+---
+
+## 6. SEO 設計
+
+記事ごと:
+
+- title
+- meta description
+- canonical
+- OGP
+- Twitter Card
+- 適切な見出し構造
+- 読みやすい slug URL
+
+サイト全体:
+
+- sitemap
+- robots.txt
+- RSS
+
+---
+
+## 7. デプロイ構成
+
 ```text
-Sanity Studio → GitHub Actions → Astro 静的出力 → S3 → CloudFront
+Sanity Studio
+   ↓
+Sanity Content Lake
+   ↓ ビルド時取得
+GitHub Actions
+   ↓
+Astro 静的出力
+   ↓
+S3 バケット
+   ↓
+CloudFront
+   ↓
+閲覧者
 ```
 
-Sanity は活動報告とサービス案内を保存します。Astro はビルド時に公開済みコンテンツだけからページを生成します。S3 と CloudFront は静的ファイルを配信します。
+---
 
-公開サイト用のアプリケーションサーバとデータベースは持ちません。
+## 8. AWS 上の考慮点
 
-## 予定するルート
+- CloudFront を公開入口にし、S3 は原則直接公開しない
+- 独自ドメインを使う場合は Route53 / ACM を使う
+- キャッシュ無効化戦略を deploy workflow に含める
+- 静的ルーティング時の 404 / エラーページ挙動を明示する
 
-#4 で `/`、`/usage/`、`/price/`、`/staff/`、`/blog/`、`/blog/[slug]/`、`/categories/`、`/categories/[slug]/`、`/access/`、`/contact/` を実装します。
+---
 
-ローカルではフォールバックコンテンツで画面を確認できます。本番では `SANITY_FALLBACK_MODE=never` とし、Sanity 未設定や取得失敗を公開に使いません。
+## 9. 保留中の設計メモ
+
+- preview 機能は後回しでもよい
+- 画像最適化は MVP では単純に保つ
+- アクセス解析は後から軽量なものを追加すればよい
+
+## 10. 実装メモ
+
+- Astro 側は `src/lib/content/api.ts` から Sanity を取得する
+- Sanity 未設定時でもローカル確認できるよう、最小のフォールバックコンテンツを持つ
+- 本番 deploy では `SANITY_FALLBACK_MODE=never` とし、Sanity fetch 失敗時に fallback content を公開しない
+- Portable Text は HTML に変換して表示する
+- Sanity Studio は `sanity/` 配下で管理し、同一リポジトリで運用する

@@ -132,7 +132,7 @@ In `PRODUCT_REQUIREMENTS.md` and `ARCHITECTURE.md`, replace technical-blog audie
 
 - [ ] **Step 3: Align operational documentation**
 
-Replace technical article import, code-block, ChatGPT-share, and Content Agent instructions with Sanity-based activity-report and service-page guidance. Keep deployment architecture and environment keys, but remove unverified claims of a completed production connection. In `DECISIONS.md`, record adopting blog-tech as the foundation and removing technical-writing tooling.
+Remove the retired Markdown import and ChatGPT-share instructions. Preserve the existing Site / Studio deployment, Terraform, webhook, incident response, and Content Agent guidance; adapt only product-specific names and planned routes. Keep the architecture and environment keys, but remove unverified claims of a completed blog-pet production connection. In `DECISIONS.md`, record adopting blog-tech as the foundation and removing technical-writing tooling while retaining applicable architectural decisions.
 
 - [ ] **Step 4: Verify documentation and static build**
 
@@ -184,6 +184,8 @@ git commit -m "docs: add production fallback verification"
 ~~~
 
 ## Plan Self-Review
+
+Review correction: The initial documentation pass compressed established deployment and operations procedures. The final pass restores those procedures from `origin/main` and limits their edits to blog-pet terminology and retired technical-article tooling. This amendment follows the user's architecture-preservation feedback on PR #7.
 
 - **Spec coverage:** Preserves static architecture and production fallback safety; removes technical-blog identity and tooling; defers new CMS models and service pages to #3 and #4.
 - **Step scan:** Each step names the relevant files, command, and expected result.
