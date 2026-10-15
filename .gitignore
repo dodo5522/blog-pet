@@ -18,3 +18,4 @@ __pycache__/
 *.tfvars
 
 .superpowers
+.worktrees

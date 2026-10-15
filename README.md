@@ -1,6 +1,6 @@
-# Personal Tech Blog / 個人技術ブログ
+# blog-pet
 
-Astro ベースの個人技術ブログです。コンテンツ管理に Sanity、配信に AWS S3 + CloudFront を使用します。
+ペットシッターのサービス案内と活動報告を掲載する Astro ベースの静的サイトです。コンテンツ管理に Sanity、配信に AWS S3 + CloudFront を使用します。
 
 詳細は以下を参照してください。
 
@@ -24,8 +24,7 @@ Astro ベースの個人技術ブログです。コンテンツ管理に Sanity�
 
 ## 現在の状態
 
-Astro サイト、Sanity Studio スキーマ、CI/CD の最小構成まで実装済みです。  
-既存の AWS リソース（S3 / CloudFront / ドメイン / 証明書）を使った本番デプロイ接続確認済みです。
+Astro サイト、Sanity Studio スキーマ、CI/CD は blog-tech の実装を引き継いでいます。blog-pet 向けのスキーマとページは #3、#4、AWS と Sanity への接続確認は #6 で行います。
 
 ## セットアップ
 
@@ -40,20 +39,11 @@ Sanity Studio のローカル起動:
 pnpm sanity:dev
 ```
 
-Markdown パッケージを Sanity Draft として取り込む:
-
-```bash
-pnpm sanity:import-draft -- --source tmp/<package-dir> --dry-run
-pnpm sanity:import-draft -- --source tmp/<package-dir> --slug pve-gpu-passthrough-linux-desktop
-```
-
-この import は `article.md` と `images/` を読み取り、Sanity の Draft document と画像 asset を作成します。書き込みには `SANITY_WRITE_TOKEN` が必要です。
-
 環境変数は `env.example` を参照してください。Sanity の接続情報が未設定でも、`SANITY_FALLBACK_MODE=auto` の既定動作によりフォールバックコンテンツで Astro 側の画面確認はできます。Sanity 接続済みの状態で固定 fallback 記事だけを確認する場合は、一時的に `SANITY_FALLBACK_MODE=always` を使います。
 
-`SANITY_FALLBACK_MODE=always` は `src/lib/content/fallback.ts` の固定データを使う設定です。`tmp/` 配下の記事パッケージは Astro 側から直接読まないため、記事として表示するには `pnpm sanity:import-draft` で Sanity Draft を作成し、Studio で publish してください。
+`SANITY_FALLBACK_MODE=always` は `src/lib/content/fallback.ts` の固定データを使う設定です。本番の `Deploy Site` workflow は `never` に固定しています。
 
-## 本番デプロイ最短手順（既存AWSリソース利用）
+## 本番デプロイの設定（#6 で接続確認）
 
 1. GitHub Repository Variables を設定
    - `PUBLIC_SITE_URL`
@@ -62,7 +52,6 @@ pnpm sanity:import-draft -- --source tmp/<package-dir> --slug pve-gpu-passthroug
    - `CLOUDFRONT_DISTRIBUTION_ID`
    - `SANITY_DATASET`
    - `SANITY_API_VERSION`
-   - `SANITY_FALLBACK_MODE` = `never`
 2. GitHub Repository Secrets を設定
    - `SANITY_PROJECT_ID`
    - `SANITY_READ_TOKEN`
@@ -75,7 +64,8 @@ Studio 配信に必要な Repository Variables:
 
 - `TF_STATE_BUCKET_NAME`
 - `TF_STATE_KEY`
-- `TF_STATE_REGION`
+
+Terraform state のリージョンには `AWS_REGION` を使用します。初回の Terraform 適用、Sanity webhook、Studio 配信先の確認は `docs/DEPLOYMENT.md` を参照してください。
 
 開発を進める際は、まず `AGENTS.md`、関連する `docs/*`、`CONTRIBUTING.md` を確認してください。
 実装は短命ブランチで行い、Pull Request 経由で `main` に統合します。

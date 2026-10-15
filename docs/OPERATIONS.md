@@ -1,44 +1,16 @@
 # OPERATIONS.md
 
+blog-tech から引き継ぐ運用手順を記録する。コンテンツモデルと公開ページの移行は #3、#4、blog-pet の配信環境での検証は #6 で行う。
+
 ## 日常運用
 
-### 新しい記事を追加する
+### 活動報告を追加する
 
 1. Sanity Studio を開く
 2. Post を作成または編集する
 3. Publish する
 4. CI/CD が実行されたことを確認する
 5. 公開サイトでページを確認する
-
-### Markdown パッケージから Draft を作成する
-
-`article.md` と `images/` を含む記事パッケージは、import スクリプトで Sanity Draft として取り込める。
-
-```bash
-pnpm sanity:import-draft -- --source tmp/<package-dir> --dry-run
-pnpm sanity:import-draft -- --source tmp/<package-dir> --slug pve-gpu-passthrough-linux-desktop
-```
-
-- `--dry-run` は Sanity に書き込まず、変換結果の概要だけを表示する
-- 実行には `SANITY_PROJECT_ID` / `SANITY_DATASET` / `SANITY_API_VERSION` / `SANITY_WRITE_TOKEN` が必要
-- 生成される Post は `_id` が `drafts.*` の Draft document になる
-- `publishedAt` は validation を通しやすくするため import 時刻で仮設定される。公開前に Studio で確認する
-- Markdown の表は、専用テーブルスキーマを増やさず `markdown` の `codeBlock` として保持する
-- `tmp/` の Markdown は Astro 側から直接読まない。公開サイトで表示確認するには、Sanity Studio で対象 Draft を publish する
-
-### ChatGPT共有リンクからDraftを作る
-
-リポジトリローカルの `.agents/skills/chatgpt-share-to-sanity-draft` を使う。公開共有リンクを取得し、会話の内容を技術記事へ再構成した後、`writing-blog-tech-articles` の編集基準と `natural-japanese` の `tech` ジャンルで推敲して既存の `sanity:import-draft` へ渡す。
-
-- 通常の `https://chatgpt.com/share/...` 公開リンクの閲覧にOpenAI APIキーは使わない
-- アクセス制限付きリンクを認証回避して取得しない。取得できない場合は会話本文またはエクスポートを入力にする
-- Sanityへの書き込みには `SANITY_WRITE_TOKEN` と対象project/datasetへのdocument・asset作成更新権限が必要
-- トークンはプロセス環境、またはGit管理外の `.env` / `.env.local` にだけ置く
-- 共有会話と生成途中の記事はGit管理外の `tmp/` に置く
-- 共有HTMLの抽出にはSkill同梱の `scripts/extract-chatgpt-share.mjs` を使い、作業後に抽出データを削除する
-- 投稿前に `scripts/check-sanity-draft.mjs` で同じslugのDraftと公開済み文書がないことを確認する
-- importは同じDraft IDを `createOrReplace` するため、Studioで手直し済みのDraftがある場合は上書きしない
-- importはDraft作成まで。publishはSanity Studioで内容を確認した後に別途行う
 
 ### サイト設定を更新する
 
@@ -47,12 +19,14 @@ pnpm sanity:import-draft -- --source tmp/<package-dir> --slug pve-gpu-passthroug
 3. Publish する
 4. デプロイ結果を確認する
 
-### タグを追加する
+### タグを追加する（現行実装）
 
 1. Tag を作成する
 2. Publish する
 3. 記事に紐付ける
 4. タグページを確認する
+
+カテゴリーへの移行は #3、カテゴリーページの公開は #4 で行う。
 
 ### コンテンツ publish 後の確認
 
@@ -74,7 +48,7 @@ Sanity Studio の依存関係やスキーマを更新した場合は、デプロ
 
 1. `Deploy Studio` と CloudFront invalidation の完了を確認する
 2. Sanity にログインしたブラウザで、CloudFront 経由のデプロイ済み Studio を一度開く
-3. Post、Tag、Author、Site settings が通常どおり表示されることを確認する
+3. Post、Tag、Author、Site settings が通常どおり表示されることを確認する（#3 のモデル移行後は Category、Staff を確認する）
 4. Sanity Dashboard の Content Agent を開き、対象 project/dataset のスキーマを認識できることを確認する
 
 Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリは `sanity` と `@sanity/vision` を 5.31.2 に固定している。Studio を開く操作は、デプロイ済みスキーマを Sanity 側へ登録するために必要であり、CI だけでは代替しない。
@@ -88,7 +62,7 @@ Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリ�
 3. `Deploy Studio` を `workflow_dispatch` で実行する（または `main` push の自動起動を待つ）
 4. `Load Studio deploy targets from Terraform outputs` の成功を確認する
 
-### 実記事の表示確認
+### 活動報告の表示確認
 
 1. 記事詳細で見出し、本文余白、リスト、コードブロック、画像キャプションが崩れていないことを確認する
 2. 記事ページの HTML で `og:type=article`、`og:image`、`twitter:card`、canonical URL が意図通りであることを確認する

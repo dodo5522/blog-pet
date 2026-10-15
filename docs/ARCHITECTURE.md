@@ -6,7 +6,7 @@
 
 ### コンテンツの流れ
 
-1. 編集者が Sanity Studio で記事を公開する
+1. 編集者が Sanity Studio で活動報告やサービス案内を公開する
 2. webhook またはコード変更を契機に CI が起動する
 3. CI が Sanity の公開済みコンテンツを取得して Astro をビルドする
 4. 生成された静的ファイルを S3 に配置する
@@ -56,14 +56,20 @@ MVP では公開サイト用の実行時アプリケーションサーバは存�
 ## 5. ルーティング案
 
 - `/`
+- `/usage/`
+- `/price/`
+- `/staff/`
 - `/blog/`
 - `/blog/[slug]/`
-- `/tags/`
-- `/tags/[slug]/`
-- `/about/`
+- `/categories/`
+- `/categories/[slug]/`
+- `/access/`
+- `/contact/`
 - `/rss.xml`
 - `/sitemap-index.xml`
 - `/robots.txt`
+
+ペットシッター向けのページとコンテンツモデルへの移行は #3、#4 で行う。現時点の Astro と Sanity の実装には blog-tech のルートが残る。
 
 ---
 

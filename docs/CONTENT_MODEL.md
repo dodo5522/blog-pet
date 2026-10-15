@@ -2,7 +2,7 @@
 
 ## 概要
 
-Sanity のスキーマは、ブログ運営に必要な最小構成に絞る。
+以下は blog-tech から引き継いだ現在の Sanity スキーマです。#3 で Post の記事分類を Category に変更し、Author を Staff に移行して、Service page と問い合わせ先の設定を追加します。移行後の設計は `docs/superpowers/specs/2026-10-12-blog-pet-design.md` を参照してください。
 
 ---
 

@@ -1,5 +1,7 @@
 # DEPLOYMENT.md
 
+この文書は blog-tech から引き継ぐ Site / Studio の配信方式と運用手順を記録する。blog-pet の AWS・Sanity リソースへの接続と手順の検証は #6 で行う。
+
 ## 1. デプロイ先
 
 - 静的ホスティング: AWS S3
@@ -56,10 +58,8 @@ Repository Variables:
 - `CLOUDFRONT_DISTRIBUTION_ID`
 - `TF_STATE_BUCKET_NAME`
 - `TF_STATE_KEY`
-- `TF_STATE_REGION`
 - `SANITY_DATASET`
 - `SANITY_API_VERSION`
-- `SANITY_FALLBACK_MODE`（本番 deploy は `never`）
 
 Repository Secrets:
 
@@ -71,6 +71,7 @@ Repository Secrets:
 
 - 将来 Environment secrets/variables に移行する場合でも、同じキー名を使えば workflow 側の参照コード変更は不要
 - `deploy-studio.yml` は `terraform -chdir=infra output -raw` で `studio_bucket_name` / `studio_cloudfront_distribution_id` を取得する
+- Terraform state のリージョンには `AWS_REGION` を使う。公開サイトの本番ビルドでは `SANITY_FALLBACK_MODE=never` を workflow 内で固定する
 
 ---
 
@@ -141,7 +142,7 @@ on:
 }
 ```
 
-GitHub PAT の権限は `Deploy Site` workflow を直接操作する権限ではなく、`repository_dispatch` イベントを repository に作成するための権限として判定される。  
+GitHub PAT の権限は `Deploy Site` workflow を直接操作する権限ではなく、`repository_dispatch` イベントを repository に作成するための権限として判定される。
 そのため Fine-grained PAT では `Actions: Read and write` ではなく、GitHub API の `Create a repository dispatch event` 要件に従って `Contents: Read and write` を付与する。
 
 Sanity 管理画面（Project > API > Webhooks）で以下を設定する。
@@ -166,7 +167,7 @@ Sanity 管理画面（Project > API > Webhooks）で以下を設定する。
 }
 ```
 
-Sanity webhook では送信 body を `Payload` や `Body` ではなく `Projection` で定義する。  
+Sanity webhook では送信 body を `Payload` や `Body` ではなく `Projection` で定義する。
 `Projection` を空にすると、変更された Sanity document 全体が body として送信され、GitHub API 側で `event_type` 不足の 422 になる。
 
 dispatch token は次のいずれかを使い、Sanity webhook の HTTP Header に設定する。
@@ -203,8 +204,8 @@ gh api repos/<owner>/<repo>/dispatches -X POST -f event_type='sanity-content-cha
 - `SANITY_DATASET`
 - `SANITY_API_VERSION`
 - `SANITY_READ_TOKEN`（必要な場合）
-- `SANITY_FALLBACK_MODE`
-- `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` または OIDC によるロール引受
+- `SANITY_FALLBACK_MODE`（workflow 内で `never` に固定）
+- AWS 認証は GitHub OIDC によるロール引受
 - `AWS_REGION`
 - `S3_BUCKET_NAME`
 - `CLOUDFRONT_DISTRIBUTION_ID`
@@ -226,7 +227,7 @@ Sanity webhook を GitHub `repository_dispatch` に接続する場合は、GitHu
 
 本番 deploy で fallback を許可すると、Sanity 障害や設定ミスのままサンプル記事を公開する可能性があるため、`deploy-site.yml` では `SANITY_FALLBACK_MODE=never` を固定する。
 
-fallback content は `src/lib/content/fallback.ts` にある固定データであり、`tmp/` 配下の記事パッケージを自動的に読むものではない。`tmp/<package-dir>` の記事をフロントエンドで確認するには、import スクリプトで Sanity Draft を作成し、Sanity Studio で内容確認後に publish する。
+fallback content は `src/lib/content/fallback.ts` にある固定データであり、本番コンテンツの代わりには使わない。
 
 ---
 
@@ -248,7 +249,7 @@ fallback content は `src/lib/content/fallback.ts` にある固定データで�
 - invalidation 対象の例:
   - `/index.html`
   - `/blog/*`
-  - `/tags/*`
+  - `/tags/*`（現行ルート。#4 で `/categories/*` に移行）
   - `/rss.xml`
   - `/sitemap*`
 
@@ -306,7 +307,7 @@ MVP では更新頻度が低い前提で、必要なら `/*` の全体 invalidat
 前提:
 
 - `infra/` の backend は S3 を使用する
-- `deploy-studio.yml` の `TF_STATE_BUCKET_NAME` / `TF_STATE_KEY` / `TF_STATE_REGION` が、`terraform apply` 時と同一である
+- `deploy-studio.yml` の `TF_STATE_BUCKET_NAME` / `TF_STATE_KEY` / `AWS_REGION` が、`terraform apply` 時の state 設定と一致する
 
 初回または `infra/` 変更時:
 

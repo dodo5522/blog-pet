@@ -1,6 +1,14 @@
 # DECISIONS.md
 
-## 2026-09-06: 日本語記事の推敲と静的検査を分離する
+## 2026-10-13: blog-tech を blog-pet の基盤として採用する
+
+Astro、Sanity、GitHub Actions、S3、CloudFront による静的サイト構成を引き継ぐ。公開サイトの表示時にコンテンツ API や独自バックエンドへ依存しないため、運用コストと保守負担を抑えられる。
+
+## 2026-10-13: 技術記事専用の執筆・import ツールを削除する
+
+Markdown からの技術記事 Draft import、技術文書専用の textlint、ChatGPT共有リンクの記事化は、ペットシッターサイトの運用範囲に含めない。Sanity Studio で活動報告とサービス案内を編集する運用に統一する。
+
+## 2026-09-06: 日本語記事の推敲と静的検査を分離する（blog-tech 時代の判断、blog-pet では廃止）
 
 - `humanizer-ja` を `natural-japanese` に置き換え、技術記事の設計と文脈を踏まえた推敲に使う。導入元は `coji/natural-japanese` のcommit `9a78a42964096da509b8f3e011f0085a5f080151`
 - textlintと `textlint-rule-preset-ja-technical-writing` で、日本語技術文書の再現可能な検査を行う
@@ -39,7 +47,7 @@
 - Astro の公開サイト、Sanity スキーマ、GROQ クエリ、データモデルには変更しない
 - `main` マージ後の `Deploy Studio` 完了だけでは Content Agent 接続確認は完了せず、Studio を一度開く手順が必要になる
 
-## 2026-08-09: ChatGPT共有会話の記事化はリポジトリローカルSkillで行う
+## 2026-08-09: ChatGPT共有会話の記事化はリポジトリローカルSkillで行う（blog-tech 時代の判断、blog-pet では廃止）
 
 - 当初は `gonta223/humanizer-ja` を生成記事の日本語推敲に採用した。2026-09-06の判断により `natural-japanese` へ置き換えた
 - 共有リンクの記事化手順は `.agents/skills/chatgpt-share-to-sanity-draft` としてリポジトリ管理する

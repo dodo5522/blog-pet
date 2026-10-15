@@ -2,8 +2,11 @@
 
 ## リリース前チェック
 
-- [ ] `pnpm install` が成功する
+- [ ] `pnpm install --frozen-lockfile` が成功する
+- [ ] `pnpm format:check` が成功する
 - [ ] ローカルビルドが成功する
+- [ ] Sanity 未設定で `SANITY_FALLBACK_MODE=auto pnpm build` が成功する
+- [ ] Sanity 未設定で `SANITY_FALLBACK_MODE=never pnpm build` が失敗する
 - [ ] TypeScript エラーが残っていない
 - [ ] lint が通る
 - [ ] ローカルで主要ページ表示が正常
@@ -40,6 +43,7 @@
 - [ ] CloudFront 経由でホーム画面が表示される
 - [ ] 記事一覧が表示される
 - [ ] 記事詳細が表示される
+- [ ] ご利用方法、料金、スタッフ、アクセス・対応エリア、お問い合わせへの導線が表示される（#4 で導入）
 - [ ] 存在しない URL で 404 ステータスと 404 ページが返る
 - [ ] メタデータがページソースに出ている
 - [ ] RSS が参照できる

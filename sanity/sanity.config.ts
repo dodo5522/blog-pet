@@ -14,7 +14,7 @@ const dataset =
 
 export default defineConfig({
   name: "default",
-  title: "Tech Blog Studio",
+  title: "blog-pet Studio",
   projectId,
   dataset,
   plugins: [structureTool(), visionTool()],
