@@ -52,6 +52,21 @@ export const siteSettingsType = defineType({
       type: "array",
       of: [{ type: "socialLink" }],
     }),
+    defineField({
+      name: "contactUrl",
+      title: "問い合わせ先 URL",
+      type: "url",
+      description: "問い合わせフォームなどの外部 URL を設定します。",
+      validation: (rule) =>
+        rule.uri({ allowRelative: false, scheme: ["http", "https"] }),
+    }),
+    defineField({
+      name: "contactLabel",
+      title: "問い合わせリンクの表示名",
+      type: "string",
+      description: "例: お問い合わせフォーム",
+      validation: (rule) => rule.max(60),
+    }),
   ],
   preview: {
     prepare() {

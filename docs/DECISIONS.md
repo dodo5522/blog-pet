@@ -106,3 +106,16 @@ Markdown からの技術記事 Draft import、技術文書専用の textlint、C
 - 本番 deploy workflow は `SANITY_FALLBACK_MODE=never` を使う
 - Sanity 未設定のローカル確認は `auto` で継続できる
 - Sanity 接続済み環境でオフライン表示確認をする場合だけ、明示的に `always` を使う
+
+## 2026-10-17: 既存コンテンツを保持しながら新モデルへ段階移行する
+
+旧 `tag` / `author` 文書と `post.tags` を新しい `category` / `staff` へ手動移行できるよう、Studio スキーマと取得 API に一時的な互換性を残す。既存文書は自動削除せず、参照移行と公開サイトの確認後に別 Issue で互換コードを廃止する。
+
+`servicePage.kind` は `usage`、`price`、`access`、`contact` の4種に固定し、同種の重複文書は作成時の Studio 検証で警告する。公開取得で重複が残っている場合の結果は `_id` 昇順で一定にする。
+
+理由: Sanity dataset には既存の技術ブログ用文書が残っている可能性があり、スキーマ切り替え時のデータ破壊を避けつつ、段階的に新しい記事分類とスタッフ情報へ移すため。
+
+影響:
+- 新規記事は `categories` と `staff` を使い、`tags` と旧 `author` は移行用に限定する。
+- 移行完了後、旧モデルと互換 API の削除を別 Issue として追跡する。
+- `docs/CONTENT_MODEL.md` にデータを残したまま移行する順序を記録する。

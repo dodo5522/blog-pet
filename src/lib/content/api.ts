@@ -1,19 +1,35 @@
 import {
   fallbackPosts,
+  fallbackCategories,
+  fallbackServicePages,
   fallbackSiteSettings,
+  fallbackStaff,
   fallbackTags,
 } from "@/lib/content/fallback";
 import {
   POST_BY_SLUG_QUERY,
   POSTS_QUERY,
+  CATEGORIES_QUERY,
+  SERVICE_PAGE_BY_KIND_QUERY,
   SITE_SETTINGS_QUERY,
+  STAFF_QUERY,
   TAGS_QUERY,
 } from "@/lib/content/queries";
 import {
   normalizeSiteSettings,
   type SanitySiteSettings,
 } from "@/lib/content/siteSettings";
-import type { Post, PostSummary, SiteSettings, Tag } from "@/lib/content/types";
+import { normalizePostSummary, postMatchesTagSlug } from "@/lib/content/compat";
+import type {
+  Category,
+  Post,
+  PostSummary,
+  ServicePage,
+  ServicePageKind,
+  SiteSettings,
+  Staff,
+  Tag,
+} from "@/lib/content/types";
 import { sanityFallbackMode } from "@/lib/env";
 import { sanityClient } from "@/lib/sanity/client";
 
@@ -98,20 +114,19 @@ async function fetchSanity<T>(
   return request;
 }
 
-function normalizePostSummary<T extends PostSummary>(post: T): T {
-  return {
-    ...post,
-    tags: post.tags ?? [],
-  };
-}
-
 export async function getSiteSettings(): Promise<SiteSettings> {
   const result = await fetchSanity<SanitySiteSettings | null>(
     SITE_SETTINGS_QUERY,
   );
-  return result.ok && result.data
-    ? normalizeSiteSettings(result.data)
-    : fallbackSiteSettings;
+  if (result.ok) {
+    if (result.data) return normalizeSiteSettings(result.data);
+    if (normalizedFallbackMode() === "never") {
+      throw new Error(
+        "Sanity site settings are missing and fallback content is disabled.",
+      );
+    }
+  }
+  return fallbackSiteSettings;
 }
 
 export async function getPublishedPosts(): Promise<PostSummary[]> {
@@ -129,11 +144,52 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
 }
 
 export async function getTags(): Promise<Tag[]> {
-  const result = await fetchSanity<Tag[]>(TAGS_QUERY);
-  return result.ok ? result.data : fallbackTags;
+  const [categoriesResult, legacyTagsResult] = await Promise.all([
+    fetchSanity<Category[]>(CATEGORIES_QUERY),
+    fetchSanity<Tag[]>(TAGS_QUERY),
+  ]);
+  if (!categoriesResult.ok && !legacyTagsResult.ok) return fallbackTags;
+  const categories = categoriesResult.ok ? categoriesResult.data : [];
+  const legacyTags = legacyTagsResult.ok ? legacyTagsResult.data : [];
+  return [
+    ...new Map(
+      [...legacyTags, ...categories].map((tag) => [tag.slug, tag]),
+    ).values(),
+  ];
+}
+
+export async function getCategories(): Promise<Category[]> {
+  const result = await fetchSanity<Category[]>(CATEGORIES_QUERY);
+  return result.ok ? result.data : fallbackCategories;
+}
+
+export async function getPostsByCategorySlug(
+  slug: string,
+): Promise<PostSummary[]> {
+  const posts = await getPublishedPosts();
+  return posts.filter((post) =>
+    post.categories.some((category) => category.slug === slug),
+  );
+}
+
+export async function getStaff(): Promise<Staff[]> {
+  const result = await fetchSanity<Staff[]>(STAFF_QUERY);
+  return result.ok ? result.data : fallbackStaff;
+}
+
+export async function getServicePage(
+  kind: ServicePageKind,
+): Promise<ServicePage | null> {
+  const result = await fetchSanity<ServicePage | null>(
+    SERVICE_PAGE_BY_KIND_QUERY,
+    { kind },
+  );
+  return result.ok
+    ? result.data
+    : (fallbackServicePages.find((page) => page.kind === kind) ?? null);
 }
 
 export async function getPostsByTagSlug(slug: string): Promise<PostSummary[]> {
   const posts = await getPublishedPosts();
-  return posts.filter((post) => post.tags.some((tag) => tag.slug === slug));
+  return posts.filter((post) => postMatchesTagSlug(post, slug));
 }
