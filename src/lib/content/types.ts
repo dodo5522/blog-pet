@@ -76,6 +76,8 @@ export interface PostSummary {
   updatedAt?: string;
   coverImage?: SanityImage;
   categories: Category[];
+  /** Temporary raw tag refs for /tags/ route compatibility during migration. */
+  legacyTags?: Tag[];
   tags: Tag[];
   author?: Staff | Author;
   seoTitle?: string;

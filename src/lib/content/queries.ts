@@ -21,8 +21,8 @@ const POST_PROJECTION = `{
   updatedAt,
   body[]{..., asset->{url}},
   coverImage{alt, asset->{url}},
-  "categories": coalesce(categories[]->{_id, name, "slug": slug.current, description}, []),
-  "tags": coalesce(tags[]->{_id, name, "slug": slug.current, description}, []),
+  "categories": coalesce(categories[defined(@->._id)]->{_id, name, "slug": slug.current, description}, []),
+  "legacyTags": coalesce(tags[defined(@->._id)]->{_id, name, "slug": slug.current, description}, []),
   "author": author->{
     _id,
     _type,

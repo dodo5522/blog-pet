@@ -19,6 +19,7 @@ import {
   normalizeSiteSettings,
   type SanitySiteSettings,
 } from "@/lib/content/siteSettings";
+import { normalizePostSummary, postMatchesTagSlug } from "@/lib/content/compat";
 import type {
   Category,
   Post,
@@ -113,15 +114,6 @@ async function fetchSanity<T>(
   return request;
 }
 
-function normalizePostSummary<T extends PostSummary>(post: T): T {
-  const categories = post.categories ?? [];
-  return {
-    ...post,
-    categories,
-    tags: categories.length > 0 ? categories : (post.tags ?? []),
-  };
-}
-
 export async function getSiteSettings(): Promise<SiteSettings> {
   const result = await fetchSanity<SanitySiteSettings | null>(
     SITE_SETTINGS_QUERY,
@@ -199,5 +191,5 @@ export async function getServicePage(
 
 export async function getPostsByTagSlug(slug: string): Promise<PostSummary[]> {
   const posts = await getPublishedPosts();
-  return posts.filter((post) => post.tags.some((tag) => tag.slug === slug));
+  return posts.filter((post) => postMatchesTagSlug(post, slug));
 }

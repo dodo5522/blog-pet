@@ -10,7 +10,7 @@ const servicePageKinds = [
 type ServicePageValidationContext = {
   document?: { _id?: string };
   getClient: (options: { apiVersion: string }) => {
-    withConfig: (options: { perspective: "drafts" }) => {
+    withConfig: (options: { perspective: "raw" }) => {
       fetch: <T>(query: string, params: Record<string, unknown>) => Promise<T>;
     };
   };
@@ -29,7 +29,7 @@ const servicePageKindIsUnique = async (
   const draftId = `drafts.${publishedId}`;
   const client = context
     .getClient({ apiVersion: "2025-01-01" })
-    .withConfig({ perspective: "drafts" });
+    .withConfig({ perspective: "raw" });
   const duplicateId = await client.fetch<string | null>(
     `*[
       _type == "servicePage" &&
