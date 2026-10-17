@@ -7,22 +7,22 @@ const siteSettings = await getSiteSettings();
 <BaseLayout
   siteSettings={siteSettings}
   title={`About | ${siteSettings.siteTitle}`}
-  description="このブログについて。"
+  description="ペットシッターの活動報告とサービスについて。"
   canonicalPath="/about/"
 >
   <section class="page-header">
-    <p class="eyebrow">About / this log</p>
-    <h1>このブログについて</h1>
-    <p>試したことを、次にもう一度使える知識へ。</p>
+    <p class="eyebrow">About / pet sitting</p>
+    <h1>ペットシッターの活動報告とサービス案内</h1>
+    <p>日々の訪問の様子や、提供しているサービスについてお伝えします。</p>
   </section>
   <div class="content-card prose-card">
-    <h2>静的で、小さく、保守しやすく</h2>
+    <h2>日々の活動をお伝えします</h2>
     <p>
-      このサイトはAstroで静的生成し、コンテンツ管理にはSanityを使います。公開済みコンテンツだけをビルド時に取得し、S3とCloudFrontで配信します。
+      ペットシッターとして稼働する日々の報告や、お世話の内容、サービスの概要を掲載します。ご依頼を検討される方に、仕事の様子を知っていただくためのサイトです。
     </p>
-    <h2>未来の自分が再現できる記録</h2>
+    <h2>サービスについて</h2>
     <p>
-      完成形だけでなく、使ったコマンド、選んだ理由、確認した結果まで残します。コメントや検索バックエンドなどを増やさず、記事公開と保守のしやすさを優先しています。
+      ご利用方法、料金、対応エリアなどの詳細は各案内ページをご覧ください。個別のペットのカルテや健康記録を管理するサイトではありません。
     </p>
   </div>
 </BaseLayout>
