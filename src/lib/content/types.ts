@@ -19,6 +19,8 @@ export interface Tag {
   description?: string;
 }
 
+export type Category = Tag;
+
 export interface Author {
   _id: string;
   name: string;
@@ -26,6 +28,23 @@ export interface Author {
   bio?: string;
   avatar?: SanityImage;
   links?: SocialLink[];
+}
+
+export interface Staff extends Author {
+  role?: string;
+}
+
+export type ServicePageKind = "usage" | "price" | "access" | "contact";
+
+export interface ServicePage {
+  _id: string;
+  kind: ServicePageKind;
+  title: string;
+  body: PortableTextBlock[];
+  heroImage?: SanityImage;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: SanityImage;
 }
 
 export interface PortableTextSpan {
@@ -56,8 +75,9 @@ export interface PostSummary {
   publishedAt: string;
   updatedAt?: string;
   coverImage?: SanityImage;
+  categories: Category[];
   tags: Tag[];
-  author?: Author;
+  author?: Staff | Author;
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: SanityImage;
@@ -76,4 +96,6 @@ export interface SiteSettings {
   defaultSeoDescription: string;
   defaultOgImage?: SanityImage;
   socialLinks: SocialLink[];
+  contactUrl?: string;
+  contactLabel?: string;
 }
