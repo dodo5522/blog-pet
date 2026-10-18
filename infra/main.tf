@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  site_name = "tech-blog"
+  site_name = "pet-blog"
 
   default_tags = merge(
     {
