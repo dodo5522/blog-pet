@@ -24,7 +24,7 @@
 
 ## 現在の状態
 
-Astro サイト、Sanity Studio スキーマ、CI/CD は blog-tech の実装を引き継いでいます。blog-pet 向けのスキーマとページは #3、#4、AWS と Sanity への接続確認は #6 で行います。
+Astro サイト、Sanity Studio スキーマ、CI/CD は blog-tech の実装を引き継いでいます。blog-pet 向けのコンテンツモデルと公開ページは #3、#4 で整備し、AWS と Sanity への接続確認は #6 で行います。公開ページは `/usage/`、`/price/`、`/staff/`、`/blog/`、`/categories/`、`/access/`、`/contact/` です。
 
 ## セットアップ
 

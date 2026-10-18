@@ -1,0 +1,71 @@
+---
+import PortableText from "@/components/PortableText.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getServicePage, getSiteSettings } from "@/lib/content/api";
+import type { ServicePageKind } from "@/lib/content/types";
+
+interface Props {
+  kind: ServicePageKind;
+  eyebrow: string;
+  defaultTitle: string;
+  defaultDescription: string;
+}
+
+const { kind, eyebrow, defaultTitle, defaultDescription } = Astro.props;
+const [siteSettings, page] = await Promise.all([
+  getSiteSettings(),
+  getServicePage(kind),
+]);
+const title = page?.title || defaultTitle;
+const description = page?.seoDescription || defaultDescription;
+---
+
+<BaseLayout
+  siteSettings={siteSettings}
+  title={`${page?.seoTitle || title} | ${siteSettings.siteTitle}`}
+  description={description}
+  canonicalPath={`/${kind === "usage" ? "usage" : kind === "price" ? "price" : kind === "access" ? "access" : "contact"}/`}
+  imageUrl={page?.ogImage?.asset?.url || page?.heroImage?.asset?.url}
+>
+  <section class="page-header">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <p>{description}</p>
+  </section>
+  {
+    page?.heroImage?.asset?.url && (
+      <img
+        class="service-page__hero"
+        src={page.heroImage.asset.url}
+        alt={page.heroImage.alt || ""}
+      />
+    )
+  }
+  <div class="content-card prose-card">
+    <PortableText value={page?.body || []} />
+    {
+      kind === "contact" &&
+        (siteSettings.contactUrl ? (
+          <a
+            class="button service-page__contact"
+            href={siteSettings.contactUrl}
+            rel="noopener noreferrer"
+          >
+            {siteSettings.contactLabel || "お問い合わせ先を開く"}
+            <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <p class="service-page__notice">
+            お問い合わせ先は準備中です。掲載内容は運営者による設定後に表示されます。
+          </p>
+        ))
+    }
+    {
+      kind !== "contact" && (
+        <a class="button service-page__contact" href="/contact/">
+          ご相談・お問い合わせ <span aria-hidden="true">→</span>
+        </a>
+      )
+    }
+  </div>
+</BaseLayout>

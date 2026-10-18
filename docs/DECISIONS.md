@@ -109,7 +109,7 @@ Markdown からの技術記事 Draft import、技術文書専用の textlint、C
 
 ## 2026-10-18: 空の Sanity project で新しいコンテンツモデルを開始する
 
-blog-pet 用 Sanity project/dataset は空の状態から開始する。既存公開サイトは S3 上の固定 HTML のため、Sanity の旧 `tag` / `author` 文書や `post.tags` を移行する互換コードは追加しない。再利用する情報は運営者が確認し、Sanity に新規登録する。公開ルート `/tags/` は Issue #4 で URL を整理するまで Category を表示する一時的な URL 互換として扱う。
+blog-pet 用 Sanity project/dataset は空の状態から開始する。既存公開サイトは S3 上の固定 HTML のため、Sanity の旧 `tag` / `author` 文書や `post.tags` を移行する互換コードは追加しない。再利用する情報は運営者が確認し、Sanity に新規登録する。公開カテゴリー URL は `/categories/` と `/categories/[slug]/` とする。
 
 `servicePage.kind` は `usage`、`price`、`access`、`contact` の4種に固定し、同種の重複文書は作成時の Studio 検証で警告する。公開取得で重複が残っている場合の結果は `_id` 昇順で一定にする。
 
@@ -118,4 +118,4 @@ blog-pet 用 Sanity project/dataset は空の状態から開始する。既存�
 影響:
 - 記事分類は `categories`、投稿者参照は `staff` に統一する。
 - 固定 HTML の情報を再利用する場合は内容を確認して Sanity Studio で新規登録し、自動移行しない。
-- `/tags/` の一時 URL 互換は公開ルートの整理であり、旧 Sanity Tag モデルとの互換ではない。
+- 旧 blog-tech の `/tags/` ルートは引き継がず、カテゴリーの意味が明確な `/categories/` に統一する。

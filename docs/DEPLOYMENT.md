@@ -249,7 +249,8 @@ fallback content は `src/lib/content/fallback.ts` にある固定データで�
 - invalidation 対象の例:
   - `/index.html`
   - `/blog/*`
-  - `/tags/*`（現行ルート。#4 で `/categories/*` に移行）
+  - `/categories/*`
+  - `/usage/*`, `/price/*`, `/staff/*`, `/access/*`, `/contact/*`
   - `/rss.xml`
   - `/sitemap*`
 

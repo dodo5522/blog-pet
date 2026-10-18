@@ -11,6 +11,7 @@ export async function getStaticPaths() {
   const categories = await getCategories();
   return categories.map((category) => ({ params: { slug: category.slug } }));
 }
+
 const { slug } = Astro.params;
 const [siteSettings, categories, posts] = await Promise.all([
   getSiteSettings(),
@@ -18,24 +19,19 @@ const [siteSettings, categories, posts] = await Promise.all([
   getPostsByCategorySlug(slug || ""),
 ]);
 const category = categories.find((entry) => entry.slug === slug);
-if (!category) return Astro.redirect("/404/");
+if (!category) return Astro.redirect("/404.html");
 ---
 
 <BaseLayout
   siteSettings={siteSettings}
   title={`${category.name} | ${siteSettings.siteTitle}`}
   description={category.description || `${category.name} に関連する記事一覧`}
-  canonicalPath={`/tags/${category.slug}/`}
+  canonicalPath={`/categories/${category.slug}/`}
 >
   <section class="page-header">
-    <p class="eyebrow">Topic / {category.slug}</p>
+    <p class="eyebrow">Category</p>
     <h1>{category.name}</h1>
-    <p>
-      {
-        category.description ||
-          `${category.name} に関連する公開済みの記事です。`
-      }
-    </p>
+    <p>{category.description || `${category.name} に関連する公開記事です。`}</p>
   </section>
   {
     posts.length > 0 ? (
