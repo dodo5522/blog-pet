@@ -5,8 +5,8 @@
   --ledger-surface-raised: #f2ede2;
   --ledger-text: #383b32;
   --ledger-muted: #686d60;
-  --ledger-copper: #71805f;
-  --ledger-copper-strong: #536746;
+  --ledger-copper: #586b48;
+  --ledger-copper-strong: #526442;
   --ledger-border: #e5dfd2;
   --ledger-border-strong: #d3cbbb;
   --font-body:
@@ -189,7 +189,7 @@ img {
   padding: 0.7rem 1rem;
   border: 1px solid var(--ledger-copper);
   background: var(--ledger-copper);
-  color: #141618;
+  color: #fff;
   font: 700 0.78rem/1 var(--font-mono);
   text-decoration: none;
   transition:
@@ -199,7 +199,7 @@ img {
 .button:hover {
   transform: translateY(-2px);
   background: var(--ledger-copper-strong);
-  color: #141618;
+  color: #fff;
 }
 .button--ghost {
   background: transparent;
@@ -748,13 +748,13 @@ img {
 .site-header__nav a::before {
   content: none;
 }
-.site-header__contact {
+.site-header__nav a.site-header__contact {
   padding: 0.7rem 1rem;
   border-radius: 999px;
   background: var(--ledger-copper);
   color: #fff;
 }
-.site-header__contact:hover {
+.site-header__nav a.site-header__contact:hover {
   background: var(--ledger-copper-strong);
   color: #fff;
 }
