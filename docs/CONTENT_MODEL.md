@@ -1,104 +1,49 @@
-# CONTENT_MODEL.md
+# コンテンツモデル
 
-## 概要
+Sanity Studio で活動報告とサービス案内を管理し、公開済み文書を Astro のビルド時に取得します。blog-pet の Sanity project/dataset は新規作成で空のため、既存コンテンツの Sanity 間移行は行いません。現在公開中の S3 データは固定 HTML であり、Sanity に取り込む元データではありません。
 
-以下は blog-tech から引き継いだ現在の Sanity スキーマです。#3 で Post の記事分類を Category に変更し、Author を Staff に移行して、Service page と問い合わせ先の設定を追加します。移行後の設計は `docs/superpowers/specs/2026-10-12-blog-pet-design.md` を参照してください。
+## モデル
 
----
+### Post（活動報告・お知らせ）
 
-## 1. Post
+- `title`、`slug`、`excerpt`（最大240文字）、`body`（Portable Text）、`publishedAt` は必須。
+- `updatedAt`、`coverImage`、`seoTitle`、`seoDescription`、`ogImage` は任意。
+- `categories` は `category` 参照の配列です。
+- `author` は `staff` を参照します。
+- 本文画像とカバー / OGP 画像には代替テキストを設定します。コードブロックも利用できます。
+- 公開取得では `publishedAt` と slug がある文書に限定し、draft ID を除外します。
 
-必須フィールド:
+### Category
 
-- `title`: string
-- `slug`: slug
-- `excerpt`: text
-- `body`: portable text
-- `publishedAt`: datetime
-- `updatedAt`: datetime
-- `coverImage`: image
-- `tags`: tag 参照の配列
-- `author`: author 参照
-- `seoTitle`: string
-- `seoDescription`: text
-- `ogImage`: image（任意）
+`name` と `slug` が必須、`description` は任意です。初期カテゴリーは「お仕事」「日記」「お知らせ」です。Sanity で追加・変更できます。
 
-ルール:
+### Staff
 
-- slug は一意
-- title 必須
-- body 必須
-- 公開記事には publishedAt 必須
-- excerpt の長さには適切な上限を設ける
+`name` が必須です。`slug`、`role`、`bio`、`avatar`、`links` は任意です。実際に公開するスタッフ情報だけを登録してください。
 
----
+### Service page
 
-## 2. Tag
+固定のサービス案内文書です。`kind` と `title`、Portable Text の `body` が必須です。`kind` は `usage`（ご利用方法）、`price`（料金）、`access`（アクセス・対応エリア）、`contact`（お問い合わせ）のいずれか一つとし、同じ種別の別文書は Studio の検証で警告します。画像と SEO フィールドは任意です。
 
-フィールド:
+### Site settings
 
-- `name`: string
-- `slug`: slug
-- `description`: text（任意）
+サイト全体で使う `siteTitle`、`siteUrl`、既定 SEO タイトル・説明文が必須です。`siteTagline`、`defaultOgImage`、`socialLinks`、`contactUrl`、`contactLabel` は任意です。`contactUrl` は http(s) の絶対 URL に限ります。設定文書は1件だけ運用し、取得時に `_id` 順で最初の1件を使います。
 
-ルール:
+## 初期セットアップ
 
-- slug は一意
-- name 必須
+Sanity project/dataset は空の状態から開始します。Sanity Studio をデプロイし、新スキーマを反映した後、運営者が公開する内容を新規作成してください。
 
----
+1. `category` 文書を作り、「お仕事」「日記」「お知らせ」の初期分類を登録する。
+2. 実際に公開する運営者情報を `staff` として登録する。不要な架空プロフィールは作らない。
+3. `servicePage` の4種と `siteSettings` を登録し、問い合わせ URL、料金、対応エリアなどを運営者自身が確認する。
+4. 新規に作成した Sanity コンテンツを使ってローカルビルドを確認してから、新サイトを公開する。未設定時の日本語 fallback は UI 確認用で、本番データの代替ではない。
 
-## 3. Author
+現在公開中の固定 HTML から内容を再利用する場合は、運営者が必要な情報を確認・選別して Sanity Studio に新規登録します。HTML を自動変換する移行処理は用意しません。ローカルでは `SANITY_FALLBACK_MODE=auto`、本番では `SANITY_FALLBACK_MODE=never` を使います。後者では Sanity 未設定・取得失敗・必須 site settings 欠落時にビルドを失敗させます。
 
-フィールド:
+## 公開制御と補助オブジェクト
 
-- `name`: string
-- `slug`: slug（任意）
-- `bio`: text（任意）
-- `avatar`: image（任意）
-- `links`: 配列（任意）
-
-MVP では著者モデルを過剰に複雑化しない。
-
----
-
-## 4. Site settings
-
-単一ドキュメントで管理する。
-
-- `siteTitle`
-- `siteTagline`（任意、最大80文字。未設定時は既定文言を表示）
-- `siteUrl`
-- `defaultSeoTitle`
-- `defaultSeoDescription`
-- `defaultOgImage`
-- `socialLinks`
-
----
-
-## 5. Draft の扱い
-
-- 本番ビルドでは公開済みコンテンツのみ取得する
-- preview は任意。MVP では必須ではない
-
----
-
-## 6. 編集上の注意
-
-- 本文は Portable Text を基本とする
-- コードブロックを扱えるようにする
-- cover / OGP / 本文中の画像には可能な限り alt を持たせる
-- MVP ではカスタムブロックを増やしすぎない
-
-## 7. 実装済みの補助オブジェクト
-
-- `codeBlock`
-  - `filename`
-  - `language`
-  - `code`
-- `imageWithAlt`
-  - 画像本体
-  - `alt`
-- `socialLink`
-  - `label`
-  - `url`
+- `post`、`category`、`staff`、`servicePage`、`siteSettings` の取得は公開文書のみを対象にします。draft は公開ビルドへ含めません。
+- Issue #4 でカテゴリー URL に切り替えるまで、既存 `/tags/` ルートはカテゴリーを表示する一時的な URL 互換として残します。Sanity の Tag 文書やタグデータは使用しません。
+- `codeBlock` は `filename`、`language`、`code` を持ちます。
+- `imageWithAlt` は画像と必須 `alt` を持ちます。
+- `socialLink` は表示名 `label` と URL を持ちます。

@@ -2,22 +2,26 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
 import TagPill from "@/components/TagPill.astro";
-import { getPublishedPosts, getSiteSettings, getTags } from "@/lib/content/api";
+import {
+  getCategories,
+  getPublishedPosts,
+  getSiteSettings,
+} from "@/lib/content/api";
 
-const [siteSettings, posts, tags] = await Promise.all([
+const [siteSettings, posts, categories] = await Promise.all([
   getSiteSettings(),
   getPublishedPosts(),
-  getTags(),
+  getCategories(),
 ]);
 const recentPosts = posts.slice(0, 5);
 ---
 
 <BaseLayout siteSettings={siteSettings}>
   <section class="hero">
-    <p class="eyebrow">Build log / reproducible notes</p>
+    <p class="eyebrow">Pet sitter / daily reports</p>
     <h1>{siteSettings.siteTagline}</h1>
     <p>
-      {siteSettings.defaultSeoDescription} コマンド、判断、確認結果まで、未来の自分が再現できる技術ノートです。
+      {siteSettings.defaultSeoDescription} シッティングの様子やサービスについて、日々の報告をお届けします。
     </p>
     <div class="hero__actions">
       <a class="button" href="/blog/"
@@ -28,12 +32,12 @@ const recentPosts = posts.slice(0, 5);
   </section>
 
   {
-    tags.length > 0 && (
-      <nav class="tag-index" aria-label="トピックから記事を探す">
-        <span class="tag-index__label">INDEX / TOPICS</span>
+    categories.length > 0 && (
+      <nav class="tag-index" aria-label="カテゴリーから記事を探す">
+        <span class="tag-index__label">CATEGORIES</span>
         <div class="tag-index__items">
-          {tags.map((tag) => (
-            <TagPill href={`/tags/${tag.slug}/`} label={tag.name} />
+          {categories.map((category) => (
+            <TagPill href={`/tags/${category.slug}/`} label={category.name} />
           ))}
         </div>
       </nav>
@@ -43,8 +47,8 @@ const recentPosts = posts.slice(0, 5);
   <section class="entries-section" aria-labelledby="recent-entries">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Latest log</p><h2 id="recent-entries">
-          Recent entries
+        <p class="eyebrow">Activity reports</p><h2 id="recent-entries">
+          活動報告
         </h2>
       </div>
       <a href="/blog/">すべて見る <span aria-hidden="true">→</span></a>

@@ -1,6 +1,6 @@
 import type { SiteSettings } from "@/lib/content/types";
 
-export const DEFAULT_SITE_TAGLINE = "作って、確かめて、次に使える形で残す。";
+export const DEFAULT_SITE_TAGLINE = "大切な家族に、いつもの安心を。";
 
 export type SanitySiteSettings = Omit<SiteSettings, "siteTagline"> & {
   siteTagline?: string;

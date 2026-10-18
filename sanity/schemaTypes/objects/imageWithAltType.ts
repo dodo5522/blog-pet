@@ -12,7 +12,7 @@ export const imageWithAltType = defineType({
       name: "alt",
       title: "Alt text",
       type: "string",
-      validation: (rule) => rule.max(160),
+      validation: (rule) => rule.required().max(160),
     }),
   ],
 });

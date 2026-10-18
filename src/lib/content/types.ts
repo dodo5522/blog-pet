@@ -12,20 +12,34 @@ export interface SocialLink {
   url: string;
 }
 
-export interface Tag {
+export interface Category {
   _id: string;
   name: string;
   slug: string;
   description?: string;
 }
 
-export interface Author {
+export interface Staff {
   _id: string;
   name: string;
   slug?: string;
+  role?: string;
   bio?: string;
   avatar?: SanityImage;
   links?: SocialLink[];
+}
+
+export type ServicePageKind = "usage" | "price" | "access" | "contact";
+
+export interface ServicePage {
+  _id: string;
+  kind: ServicePageKind;
+  title: string;
+  body: PortableTextBlock[];
+  heroImage?: SanityImage;
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: SanityImage;
 }
 
 export interface PortableTextSpan {
@@ -56,8 +70,8 @@ export interface PostSummary {
   publishedAt: string;
   updatedAt?: string;
   coverImage?: SanityImage;
-  tags: Tag[];
-  author?: Author;
+  categories: Category[];
+  author?: Staff;
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: SanityImage;
@@ -76,4 +90,6 @@ export interface SiteSettings {
   defaultSeoDescription: string;
   defaultOgImage?: SanityImage;
   socialLinks: SocialLink[];
+  contactUrl?: string;
+  contactLabel?: string;
 }

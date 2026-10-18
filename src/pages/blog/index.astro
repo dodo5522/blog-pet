@@ -11,14 +11,14 @@ const [siteSettings, posts] = await Promise.all([
 <BaseLayout
   siteSettings={siteSettings}
   title={`Blog | ${siteSettings.siteTitle}`}
-  description="公開済み技術記事の一覧です。"
+  description="ペットシッターの活動報告とお知らせの記事一覧です。"
   canonicalPath="/blog/"
 >
   <section class="page-header">
     <p class="eyebrow">Entries / all</p>
     <h1>記事一覧</h1>
     <p>
-      実装手順、判断、失敗から得た知見を、あとから再現できる形でまとめています。
+      日々のシッティングの様子や、サービスに関するお知らせを掲載しています。
     </p>
   </section>
   {

@@ -40,7 +40,7 @@ export const postType = defineType({
               name: "alt",
               title: "Alt text",
               type: "string",
-              validation: (rule) => rule.max(160),
+              validation: (rule) => rule.required().max(160),
             }),
           ],
         }),
@@ -65,21 +65,21 @@ export const postType = defineType({
       type: "imageWithAlt",
     }),
     defineField({
-      name: "tags",
-      title: "Tags",
+      name: "categories",
+      title: "カテゴリー",
       type: "array",
       of: [
         defineArrayMember({
           type: "reference",
-          to: [{ type: "tag" }],
+          to: [{ type: "category" }],
         }),
       ],
     }),
     defineField({
       name: "author",
-      title: "Author",
+      title: "スタッフ",
       type: "reference",
-      to: [{ type: "author" }],
+      to: [{ type: "staff" }],
     }),
     defineField({
       name: "seoTitle",
