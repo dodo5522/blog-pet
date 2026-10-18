@@ -2,12 +2,16 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
 import TagPill from "@/components/TagPill.astro";
-import { getPublishedPosts, getSiteSettings, getTags } from "@/lib/content/api";
+import {
+  getCategories,
+  getPublishedPosts,
+  getSiteSettings,
+} from "@/lib/content/api";
 
-const [siteSettings, posts, tags] = await Promise.all([
+const [siteSettings, posts, categories] = await Promise.all([
   getSiteSettings(),
   getPublishedPosts(),
-  getTags(),
+  getCategories(),
 ]);
 const recentPosts = posts.slice(0, 5);
 ---
@@ -28,12 +32,12 @@ const recentPosts = posts.slice(0, 5);
   </section>
 
   {
-    tags.length > 0 && (
-      <nav class="tag-index" aria-label="トピックから記事を探す">
+    categories.length > 0 && (
+      <nav class="tag-index" aria-label="カテゴリーから記事を探す">
         <span class="tag-index__label">CATEGORIES</span>
         <div class="tag-index__items">
-          {tags.map((tag) => (
-            <TagPill href={`/tags/${tag.slug}/`} label={tag.name} />
+          {categories.map((category) => (
+            <TagPill href={`/tags/${category.slug}/`} label={category.name} />
           ))}
         </div>
       </nav>

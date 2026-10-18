@@ -1,37 +1,40 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getSiteSettings, getTags } from "@/lib/content/api";
-const [siteSettings, tags] = await Promise.all([getSiteSettings(), getTags()]);
+import { getCategories, getSiteSettings } from "@/lib/content/api";
+const [siteSettings, categories] = await Promise.all([
+  getSiteSettings(),
+  getCategories(),
+]);
 ---
 
 <BaseLayout
   siteSettings={siteSettings}
-  title={`Tags | ${siteSettings.siteTitle}`}
-  description="タグ一覧ページです。"
+  title={`カテゴリー一覧 | ${siteSettings.siteTitle}`}
+  description="記事カテゴリーの一覧です。"
   canonicalPath="/tags/"
 >
   <section class="page-header">
     <p class="eyebrow">Index / topics</p>
-    <h1>タグ一覧</h1>
+    <h1>カテゴリー一覧</h1>
     <p>カテゴリーから、関連する活動報告やお知らせを探せます。</p>
   </section>
   {
-    tags.length > 0 ? (
+    categories.length > 0 ? (
       <ul class="tag-list">
-        {tags.map((tag) => (
+        {categories.map((category) => (
           <li class="tag-list__item">
-            <a href={`/tags/${tag.slug}/`}>
+            <a href={`/tags/${category.slug}/`}>
               <span class="tag-list__arrow" aria-hidden="true">
                 →
               </span>
-              <strong>{tag.name}</strong>
-              {tag.description && <span>{tag.description}</span>}
+              <strong>{category.name}</strong>
+              {category.description && <span>{category.description}</span>}
             </a>
           </li>
         ))}
       </ul>
     ) : (
-      <p class="empty-state">利用できるタグはまだありません。</p>
+      <p class="empty-state">カテゴリーはまだありません。</p>
     )
   }
 </BaseLayout>

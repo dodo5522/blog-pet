@@ -65,19 +65,6 @@ export const postType = defineType({
       type: "imageWithAlt",
     }),
     defineField({
-      name: "tags",
-      title: "旧タグ（移行用）",
-      description:
-        "既存記事の移行が終わるまで保持します。新規記事にはカテゴリーを設定してください。",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "tag" }],
-        }),
-      ],
-    }),
-    defineField({
       name: "categories",
       title: "カテゴリー",
       type: "array",
@@ -90,11 +77,9 @@ export const postType = defineType({
     }),
     defineField({
       name: "author",
-      title: "スタッフ（旧著者も移行中は選択可）",
-      description:
-        "新規記事ではスタッフを選択してください。旧著者文書は移行完了まで残します。",
+      title: "スタッフ",
       type: "reference",
-      to: [{ type: "staff" }, { type: "author" }],
+      to: [{ type: "staff" }],
     }),
     defineField({
       name: "seoTitle",

@@ -22,10 +22,8 @@ const POST_PROJECTION = `{
   body[]{..., asset->{url}},
   coverImage{alt, asset->{url}},
   "categories": coalesce(categories[defined(@->._id)]->{_id, name, "slug": slug.current, description}, []),
-  "legacyTags": coalesce(tags[defined(@->._id)]->{_id, name, "slug": slug.current, description}, []),
   "author": author->{
     _id,
-    _type,
     name,
     "slug": slug.current,
     role,
@@ -68,11 +66,4 @@ export const SERVICE_PAGE_BY_KIND_QUERY = `
     _id, kind, title, body[]{..., asset->{url}},
     heroImage{alt, asset->{url}}, seoTitle, seoDescription, ogImage{alt, asset->{url}}
   }
-`;
-
-// Temporary compatibility for existing /tags/ routes during Issue #4 migration.
-export const TAGS_QUERY = `
-*[_type == "tag" && defined(slug.current) && !(_id in path("drafts.**"))] | order(name asc){
-  _id, name, "slug": slug.current, description
-}
 `;

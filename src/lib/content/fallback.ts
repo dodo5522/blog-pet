@@ -7,7 +7,6 @@ import type {
   ServicePageKind,
   SiteSettings,
   Staff,
-  Tag,
 } from "@/lib/content/types";
 import { publicSiteUrl } from "@/lib/env";
 
@@ -41,9 +40,6 @@ export const fallbackCategories: Category[] = [
     description: "サービスに関するお知らせ",
   },
 ];
-
-// Temporary /tags/ compatibility until Issue #4 replaces the routes.
-export const fallbackTags: Tag[] = fallbackCategories;
 
 export const fallbackStaff: Staff[] = [
   {
@@ -114,7 +110,6 @@ export const fallbackPosts: Post[] = [
       "このブログでは、ペットシッターとして訪問した日の様子やサービスについてお伝えします。",
     publishedAt: "2026-04-19T00:00:00.000Z",
     updatedAt: "2026-04-19T00:00:00.000Z",
-    tags: fallbackCategories,
     categories: fallbackCategories,
     seoTitle: "ペットシッターの日々について",
     seoDescription: "活動報告とサービス案内をお届けするブログです。",

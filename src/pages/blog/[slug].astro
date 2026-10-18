@@ -53,10 +53,10 @@ const description =
       </div>
       <p class="post__excerpt">{post.excerpt}</p>
       {
-        post.tags.length > 0 && (
-          <div class="post__tags">
-            {post.tags.map((tag) => (
-              <TagPill href={`/tags/${tag.slug}/`} label={tag.name} />
+        post.categories.length > 0 && (
+          <div class="post__tags" aria-label="カテゴリー">
+            {post.categories.map((category) => (
+              <TagPill href={`/tags/${category.slug}/`} label={category.name} />
             ))}
           </div>
         )

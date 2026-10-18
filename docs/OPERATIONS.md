@@ -19,14 +19,14 @@ blog-tech から引き継ぐ運用手順を記録する。コンテンツモデ�
 3. Publish する
 4. デプロイ結果を確認する
 
-### タグを追加する（現行実装）
+### カテゴリーを追加する
 
-1. Tag を作成する
+1. Category を作成する
 2. Publish する
 3. 記事に紐付ける
-4. タグページを確認する
+4. カテゴリーページを確認する（Issue #4 までは URL が `/tags/` のままです）
 
-カテゴリーへの移行は #3、カテゴリーページの公開は #4 で行う。
+カテゴリーページの URL と表示の整理は #4 で行う。
 
 ### コンテンツ publish 後の確認
 
@@ -48,7 +48,7 @@ Sanity Studio の依存関係やスキーマを更新した場合は、デプロ
 
 1. `Deploy Studio` と CloudFront invalidation の完了を確認する
 2. Sanity にログインしたブラウザで、CloudFront 経由のデプロイ済み Studio を一度開く
-3. Post、Tag、Author、Site settings が通常どおり表示されることを確認する（#3 のモデル移行後は Category、Staff を確認する）
+3. Post、Category、Staff、Service page、Site settings が通常どおり表示されることを確認する
 4. Sanity Dashboard の Content Agent を開き、対象 project/dataset のスキーマを認識できることを確認する
 
 Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリは `sanity` と `@sanity/vision` を 5.31.2 に固定している。Studio を開く操作は、デプロイ済みスキーマを Sanity 側へ登録するために必要であり、CI だけでは代替しない。

@@ -4,7 +4,6 @@ import {
   fallbackServicePages,
   fallbackSiteSettings,
   fallbackStaff,
-  fallbackTags,
 } from "@/lib/content/fallback";
 import {
   POST_BY_SLUG_QUERY,
@@ -13,13 +12,12 @@ import {
   SERVICE_PAGE_BY_KIND_QUERY,
   SITE_SETTINGS_QUERY,
   STAFF_QUERY,
-  TAGS_QUERY,
 } from "@/lib/content/queries";
 import {
   normalizeSiteSettings,
   type SanitySiteSettings,
 } from "@/lib/content/siteSettings";
-import { normalizePostSummary, postMatchesTagSlug } from "@/lib/content/compat";
+import { postMatchesCategorySlug } from "@/lib/content/categories";
 import type {
   Category,
   Post,
@@ -28,7 +26,6 @@ import type {
   ServicePageKind,
   SiteSettings,
   Staff,
-  Tag,
 } from "@/lib/content/types";
 import { sanityFallbackMode } from "@/lib/env";
 import { sanityClient } from "@/lib/sanity/client";
@@ -131,31 +128,16 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 
 export async function getPublishedPosts(): Promise<PostSummary[]> {
   const result = await fetchSanity<PostSummary[]>(POSTS_QUERY);
-  return result.ok ? result.data.map(normalizePostSummary) : fallbackPosts;
+  return result.ok ? result.data : fallbackPosts;
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const result = await fetchSanity<Post | null>(POST_BY_SLUG_QUERY, { slug });
   if (result.ok) {
-    return result.data ? normalizePostSummary(result.data) : null;
+    return result.data;
   }
 
   return fallbackPosts.find((entry) => entry.slug === slug) || null;
-}
-
-export async function getTags(): Promise<Tag[]> {
-  const [categoriesResult, legacyTagsResult] = await Promise.all([
-    fetchSanity<Category[]>(CATEGORIES_QUERY),
-    fetchSanity<Tag[]>(TAGS_QUERY),
-  ]);
-  if (!categoriesResult.ok && !legacyTagsResult.ok) return fallbackTags;
-  const categories = categoriesResult.ok ? categoriesResult.data : [];
-  const legacyTags = legacyTagsResult.ok ? legacyTagsResult.data : [];
-  return [
-    ...new Map(
-      [...legacyTags, ...categories].map((tag) => [tag.slug, tag]),
-    ).values(),
-  ];
 }
 
 export async function getCategories(): Promise<Category[]> {
@@ -167,9 +149,7 @@ export async function getPostsByCategorySlug(
   slug: string,
 ): Promise<PostSummary[]> {
   const posts = await getPublishedPosts();
-  return posts.filter((post) =>
-    post.categories.some((category) => category.slug === slug),
-  );
+  return posts.filter((post) => postMatchesCategorySlug(post, slug));
 }
 
 export async function getStaff(): Promise<Staff[]> {
@@ -187,9 +167,4 @@ export async function getServicePage(
   return result.ok
     ? result.data
     : (fallbackServicePages.find((page) => page.kind === kind) ?? null);
-}
-
-export async function getPostsByTagSlug(slug: string): Promise<PostSummary[]> {
-  const posts = await getPublishedPosts();
-  return posts.filter((post) => postMatchesTagSlug(post, slug));
 }

@@ -1,32 +1,41 @@
 ---
 import PostCard from "@/components/PostCard.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getPostsByTagSlug, getSiteSettings, getTags } from "@/lib/content/api";
+import {
+  getCategories,
+  getPostsByCategorySlug,
+  getSiteSettings,
+} from "@/lib/content/api";
 
 export async function getStaticPaths() {
-  const tags = await getTags();
-  return tags.map((tag) => ({ params: { slug: tag.slug } }));
+  const categories = await getCategories();
+  return categories.map((category) => ({ params: { slug: category.slug } }));
 }
 const { slug } = Astro.params;
-const [siteSettings, tags, posts] = await Promise.all([
+const [siteSettings, categories, posts] = await Promise.all([
   getSiteSettings(),
-  getTags(),
-  getPostsByTagSlug(slug || ""),
+  getCategories(),
+  getPostsByCategorySlug(slug || ""),
 ]);
-const tag = tags.find((entry) => entry.slug === slug);
-if (!tag) return Astro.redirect("/404/");
+const category = categories.find((entry) => entry.slug === slug);
+if (!category) return Astro.redirect("/404/");
 ---
 
 <BaseLayout
   siteSettings={siteSettings}
-  title={`${tag.name} | ${siteSettings.siteTitle}`}
-  description={tag.description || `${tag.name} に関連する記事一覧`}
-  canonicalPath={`/tags/${tag.slug}/`}
+  title={`${category.name} | ${siteSettings.siteTitle}`}
+  description={category.description || `${category.name} に関連する記事一覧`}
+  canonicalPath={`/tags/${category.slug}/`}
 >
   <section class="page-header">
-    <p class="eyebrow">Topic / {tag.slug}</p>
-    <h1>{tag.name}</h1>
-    <p>{tag.description || `${tag.name} に関連する公開済みの記事です。`}</p>
+    <p class="eyebrow">Topic / {category.slug}</p>
+    <h1>{category.name}</h1>
+    <p>
+      {
+        category.description ||
+          `${category.name} に関連する公開済みの記事です。`
+      }
+    </p>
   </section>
   {
     posts.length > 0 ? (
@@ -36,7 +45,9 @@ if (!tag) return Astro.redirect("/404/");
         ))}
       </div>
     ) : (
-      <p class="empty-state">このタグに紐づく公開記事はまだありません。</p>
+      <p class="empty-state">
+        このカテゴリーに紐づく公開記事はまだありません。
+      </p>
     )
   }
 </BaseLayout>

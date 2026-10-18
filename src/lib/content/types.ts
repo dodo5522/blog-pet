@@ -12,26 +12,21 @@ export interface SocialLink {
   url: string;
 }
 
-export interface Tag {
+export interface Category {
   _id: string;
   name: string;
   slug: string;
   description?: string;
 }
 
-export type Category = Tag;
-
-export interface Author {
+export interface Staff {
   _id: string;
   name: string;
   slug?: string;
+  role?: string;
   bio?: string;
   avatar?: SanityImage;
   links?: SocialLink[];
-}
-
-export interface Staff extends Author {
-  role?: string;
 }
 
 export type ServicePageKind = "usage" | "price" | "access" | "contact";
@@ -76,10 +71,7 @@ export interface PostSummary {
   updatedAt?: string;
   coverImage?: SanityImage;
   categories: Category[];
-  /** Temporary raw tag refs for /tags/ route compatibility during migration. */
-  legacyTags?: Tag[];
-  tags: Tag[];
-  author?: Staff | Author;
+  author?: Staff;
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: SanityImage;
