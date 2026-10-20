@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
-import TagPill from "@/components/TagPill.astro";
 import {
   getCategories,
   getPublishedPosts,
@@ -13,34 +12,82 @@ const [siteSettings, posts, categories] = await Promise.all([
   getPublishedPosts(),
   getCategories(),
 ]);
-const recentPosts = posts.slice(0, 5);
+const recentPosts = posts.slice(0, 3);
 ---
 
 <BaseLayout siteSettings={siteSettings}>
   <section class="hero">
-    <p class="eyebrow">Pet sitter / daily reports</p>
+    <p class="eyebrow">ペットシッターのご案内</p>
     <h1>{siteSettings.siteTagline}</h1>
     <p>
-      {siteSettings.defaultSeoDescription} シッティングの様子やサービスについて、日々の報告をお届けします。
+      {siteSettings.defaultSeoDescription} 大切な家族がいつもの場所で安心して過ごせるよう、日々の活動やサービスをご紹介します。
     </p>
     <div class="hero__actions">
-      <a class="button" href="/blog/"
-        >記事を読む <span aria-hidden="true">→</span></a
+      <a class="button" href="/usage/"
+        >ご利用方法を見る <span aria-hidden="true">→</span></a
       >
-      <a class="button button--ghost" href="/about/">このブログについて</a>
+      <a class="button button--ghost" href="/contact/">お問い合わせ</a>
+    </div>
+  </section>
+
+  <section class="service-overview" aria-labelledby="service-overview-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Service guide</p>
+        <h2 id="service-overview-title">サービスのご案内</h2>
+      </div>
+      <a href="/usage/">ご利用方法 <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="service-links">
+      <a class="service-link" href="/usage/"
+        ><span>01</span><strong>ご利用方法</strong><span aria-hidden="true"
+          >→</span
+        ></a
+      >
+      <a class="service-link" href="/price/"
+        ><span>02</span><strong>料金</strong><span aria-hidden="true">→</span
+        ></a
+      >
+      <a class="service-link" href="/staff/"
+        ><span>03</span><strong>スタッフ</strong><span aria-hidden="true"
+          >→</span
+        ></a
+      >
+      <a class="service-link" href="/access/"
+        ><span>04</span><strong>対応エリア</strong><span aria-hidden="true"
+          >→</span
+        ></a
+      >
     </div>
   </section>
 
   {
     categories.length > 0 && (
-      <nav class="tag-index" aria-label="カテゴリーから記事を探す">
-        <span class="tag-index__label">CATEGORIES</span>
-        <div class="tag-index__items">
+      <section
+        class="category-overview"
+        aria-labelledby="category-overview-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Activity reports</p>
+            <h2 id="category-overview-title">カテゴリー</h2>
+          </div>
+          <a href="/categories/">
+            一覧を見る <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="category-cards">
           {categories.map((category) => (
-            <TagPill href={`/tags/${category.slug}/`} label={category.name} />
+            <a class="category-card" href={`/categories/${category.slug}/`}>
+              <strong>{category.name}</strong>
+              <span>{category.description || "記事を読む"}</span>
+              <span class="category-card__arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
           ))}
         </div>
-      </nav>
+      </section>
     )
   }
 
@@ -64,5 +111,18 @@ const recentPosts = posts.slice(0, 5);
         <p class="empty-state">公開済みの記事はまだありません。</p>
       )
     }
+  </section>
+
+  <section class="contact-banner" aria-labelledby="contact-banner-title">
+    <div>
+      <p class="eyebrow">Feel free to contact us</p>
+      <h2 id="contact-banner-title">ご相談・お問い合わせ</h2>
+      <p>
+        サービスについて気になることがありましたら、お気軽にご相談ください。
+      </p>
+    </div>
+    <a class="button" href="/contact/"
+      >お問い合わせはこちら <span aria-hidden="true">→</span></a
+    >
   </section>
 </BaseLayout>

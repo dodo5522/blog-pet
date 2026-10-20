@@ -43,7 +43,7 @@ Sanity project/dataset は空の状態から開始します。Sanity Studio を�
 ## 公開制御と補助オブジェクト
 
 - `post`、`category`、`staff`、`servicePage`、`siteSettings` の取得は公開文書のみを対象にします。draft は公開ビルドへ含めません。
-- Issue #4 でカテゴリー URL に切り替えるまで、既存 `/tags/` ルートはカテゴリーを表示する一時的な URL 互換として残します。Sanity の Tag 文書やタグデータは使用しません。
+- 公開 URL は `/categories/` と `/categories/[slug]/` です。Sanity の Tag 文書やタグデータは使用しません。
 - `codeBlock` は `filename`、`language`、`code` を持ちます。
 - `imageWithAlt` は画像と必須 `alt` を持ちます。
 - `socialLink` は表示名 `label` と URL を持ちます。

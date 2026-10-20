@@ -1,0 +1,71 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getSiteSettings, getStaff } from "@/lib/content/api";
+
+const [siteSettings, staff] = await Promise.all([
+  getSiteSettings(),
+  getStaff(),
+]);
+---
+
+<BaseLayout
+  siteSettings={siteSettings}
+  title={`スタッフ | ${siteSettings.siteTitle}`}
+  description="ペットシッターのスタッフをご紹介します。"
+  canonicalPath="/staff/"
+>
+  <section class="page-header">
+    <p class="eyebrow">Our team</p>
+    <h1>スタッフ</h1>
+    <p>大切なご家族のお世話を担当するスタッフをご紹介します。</p>
+  </section>
+  {
+    staff.length > 0 ? (
+      <div class="staff-grid">
+        {staff.map((member) => (
+          <article class="staff-card">
+            {member.avatar?.asset?.url ? (
+              <img
+                class="staff-card__avatar"
+                src={member.avatar.asset.url}
+                alt={member.avatar.alt || `${member.name}の写真`}
+                loading="lazy"
+              />
+            ) : (
+              <div
+                class="staff-card__avatar staff-card__avatar--placeholder"
+                aria-hidden="true"
+              >
+                🐾
+              </div>
+            )}
+            <div>
+              {member.role && <p class="staff-card__role">{member.role}</p>}
+              <h2>{member.name}</h2>
+              {member.bio && <p>{member.bio}</p>}
+            </div>
+            {member.links && member.links.length > 0 && (
+              <ul class="staff-card__links">
+                {member.links.map((link) => (
+                  <li>
+                    <a href={link.url} rel="noopener noreferrer">
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">スタッフ情報は準備中です。</p>
+    )
+  }
+  <div class="contact-cta">
+    <p>サービスについてのご質問もお気軽にどうぞ。</p>
+    <a class="button" href="/contact/"
+      >お問い合わせ <span aria-hidden="true">→</span></a
+    >
+  </div>
+</BaseLayout>

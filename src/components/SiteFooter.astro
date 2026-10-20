@@ -8,10 +8,22 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p><span aria-hidden="true">©</span> {year} {title}</p>
-    <ul class="site-footer__links">
-      <li><a href="/rss.xml">rss</a></li>
-      <li><a href="/sitemap-index.xml">sitemap</a></li>
-    </ul>
+    <a class="site-footer__brand" href="/">🐾 {title}</a>
+    <nav aria-label="フッターメニュー">
+      <ul class="site-footer__links">
+        <li><a href="/usage/">ご利用方法</a></li>
+        <li><a href="/price/">料金</a></li>
+        <li><a href="/staff/">スタッフ</a></li>
+        <li><a href="/blog/">活動報告</a></li>
+        <li><a href="/categories/">カテゴリー</a></li>
+        <li><a href="/access/">対応エリア</a></li>
+        <li><a href="/contact/">お問い合わせ</a></li>
+      </ul>
+    </nav>
+    <div class="site-footer__meta">
+      <a href="/rss.xml">RSS</a>
+      <a href="/sitemap-index.xml">サイトマップ</a>
+      <span>© {year} {title}</span>
+    </div>
   </div>
 </footer>

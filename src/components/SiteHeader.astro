@@ -3,18 +3,33 @@ interface Props {
   title: string;
 }
 const { title } = Astro.props;
+const navigation = [
+  { href: "/usage/", label: "ご利用方法" },
+  { href: "/price/", label: "料金" },
+  { href: "/staff/", label: "スタッフ" },
+  { href: "/blog/", label: "活動報告" },
+  { href: "/access/", label: "対応エリア" },
+];
 ---
 
 <header class="site-header">
   <div class="site-header__inner">
     <a class="site-header__brand" href="/" aria-label={`${title} ホーム`}>
-      <span aria-hidden="true">~/</span>{title}
+      <span class="site-header__brand-mark" aria-hidden="true">🐾</span>
+      {title}
     </a>
-    <nav aria-label="Primary">
+    <nav aria-label="メインメニュー">
       <ul class="site-header__nav">
-        <li><a href="/blog/">entries</a></li>
-        <li><a href="/tags/">categories</a></li>
-        <li><a href="/about/">about</a></li>
+        {
+          navigation.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="site-header__contact" href="/contact/">お問い合わせ</a>
+        </li>
       </ul>
     </nav>
   </div>

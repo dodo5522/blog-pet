@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getCategories, getSiteSettings } from "@/lib/content/api";
+
 const [siteSettings, categories] = await Promise.all([
   getSiteSettings(),
   getCategories(),
@@ -10,25 +11,25 @@ const [siteSettings, categories] = await Promise.all([
 <BaseLayout
   siteSettings={siteSettings}
   title={`カテゴリー一覧 | ${siteSettings.siteTitle}`}
-  description="記事カテゴリーの一覧です。"
-  canonicalPath="/tags/"
+  description="活動報告やお知らせをカテゴリーから探せます。"
+  canonicalPath="/categories/"
 >
   <section class="page-header">
-    <p class="eyebrow">Index / topics</p>
-    <h1>カテゴリー一覧</h1>
-    <p>カテゴリーから、関連する活動報告やお知らせを探せます。</p>
+    <p class="eyebrow">Browse by topic</p>
+    <h1>カテゴリー</h1>
+    <p>活動報告やお知らせをカテゴリーからご覧いただけます。</p>
   </section>
   {
     categories.length > 0 ? (
-      <ul class="tag-list">
+      <ul class="category-list">
         {categories.map((category) => (
-          <li class="tag-list__item">
-            <a href={`/tags/${category.slug}/`}>
-              <span class="tag-list__arrow" aria-hidden="true">
+          <li class="category-list__item">
+            <a href={`/categories/${category.slug}/`}>
+              <strong>{category.name}</strong>
+              <span>{category.description || "カテゴリーの記事を見る"}</span>
+              <span class="category-list__arrow" aria-hidden="true">
                 →
               </span>
-              <strong>{category.name}</strong>
-              {category.description && <span>{category.description}</span>}
             </a>
           </li>
         ))}
