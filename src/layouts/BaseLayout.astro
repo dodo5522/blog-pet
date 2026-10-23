@@ -3,6 +3,7 @@ import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import type { SiteSettings } from "@/lib/content/types";
 import { publicSiteUrl } from "@/lib/env";
+import { firstNonBlank, selectSeoImage } from "@/lib/seo";
 import { siteUrlFor } from "@/lib/siteUrl";
 import "@/styles/global.css";
 
@@ -12,6 +13,7 @@ interface Props {
   canonicalPath?: string;
   imageUrl?: string;
   ogType?: "article" | "website";
+  noindex?: boolean;
   siteSettings: SiteSettings;
 }
 
@@ -21,13 +23,17 @@ const {
   canonicalPath = "/",
   imageUrl,
   ogType = "website",
+  noindex = false,
   siteSettings,
 } = Astro.props;
 const pageTitle =
-  title || siteSettings.defaultSeoTitle || siteSettings.siteTitle;
-const pageDescription = description || siteSettings.defaultSeoDescription;
+  firstNonBlank(title, siteSettings.defaultSeoTitle, siteSettings.siteTitle) ||
+  siteSettings.siteTitle;
+const pageDescription =
+  firstNonBlank(description, siteSettings.defaultSeoDescription) || "";
 const canonicalUrl = siteUrlFor(canonicalPath, publicSiteUrl);
-const ogImage = imageUrl || siteSettings.defaultOgImage?.asset?.url;
+const ogImage =
+  firstNonBlank(imageUrl) || selectSeoImage(siteSettings.defaultOgImage);
 ---
 
 <!doctype html>
@@ -38,7 +44,14 @@ const ogImage = imageUrl || siteSettings.defaultOgImage?.asset?.url;
     <meta name="theme-color" content="#fbf8f1" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${siteSettings.siteTitle} RSS`}
+      href={siteUrlFor("/rss.xml", publicSiteUrl)}
+    />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content={ogType} />
