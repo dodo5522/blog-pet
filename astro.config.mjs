@@ -10,5 +10,16 @@ const site = resolveSiteUrl(
 export default defineConfig({
   output: "static",
   site,
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        return (
+          path !== "/404.html" &&
+          path !== "/robots.txt" &&
+          !path.endsWith(".xml")
+        );
+      },
+    }),
+  ],
 });
