@@ -36,11 +36,13 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://example.com' }}
-          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
-          SANITY_DATASET: ${{ vars.SANITY_DATASET || 'production' }}
-          SANITY_API_VERSION: ${{ vars.SANITY_API_VERSION || '2025-01-01' }}
-          SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
-          SANITY_FALLBACK_MODE: auto
-          SANITY_STUDIO_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
-          SANITY_STUDIO_DATASET: ${{ vars.SANITY_DATASET || 'production' }}
+          PUBLIC_SITE_URL: https://pet.blog.uribou.me
+          SANITY_FALLBACK_MODE: always
+
+      - name: Test
+        run: pnpm test
+
+      - name: Verify generated SEO files
+        run: pnpm test:seo
+        env:
+          PUBLIC_SITE_URL: https://pet.blog.uribou.me

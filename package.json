@@ -12,6 +12,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "test": "node --test",
+    "test:seo": "node scripts/check-seo.mjs dist",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

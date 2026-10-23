@@ -13,10 +13,13 @@
 - [ ] モバイル幅とデスクトップ幅で主要ページのレイアウトが崩れない
 - [ ] 下書きが本番ビルドに含まれない
 - [ ] canonical URL が正しい
+- [ ] `PUBLIC_SITE_URL` と Sanity `siteSettings.siteUrl` が公開ドメインと一致する
+- [ ] 固定データでビルド後、`PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm test:seo` が成功する
 - [ ] sitemap が生成される
 - [ ] RSS が生成される
 - [ ] robots.txt が正しい
 - [ ] 404 ページが存在する
+- [ ] 404が `noindex` を持ち、sitemapに含まれない
 - [ ] 環境変数の説明がある
 - [ ] deploy workflow が正しい AWS リソースを参照している
 - [ ] `pnpm sanity:dev` で Studio が起動する
