@@ -1,7 +1,11 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
+import { resolveSiteUrl } from "./src/lib/siteUrl.ts";
 
-const site = process.env.PUBLIC_SITE_URL || "https://example.com";
+const site = resolveSiteUrl(
+  process.env.PUBLIC_SITE_URL,
+  process.env.SANITY_FALLBACK_MODE,
+);
 
 export default defineConfig({
   output: "static",

@@ -2,6 +2,8 @@
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import type { SiteSettings } from "@/lib/content/types";
+import { publicSiteUrl } from "@/lib/env";
+import { siteUrlFor } from "@/lib/siteUrl";
 import "@/styles/global.css";
 
 interface Props {
@@ -24,7 +26,7 @@ const {
 const pageTitle =
   title || siteSettings.defaultSeoTitle || siteSettings.siteTitle;
 const pageDescription = description || siteSettings.defaultSeoDescription;
-const canonicalUrl = new URL(canonicalPath, siteSettings.siteUrl).toString();
+const canonicalUrl = siteUrlFor(canonicalPath, publicSiteUrl);
 const ogImage = imageUrl || siteSettings.defaultOgImage?.asset?.url;
 ---
 

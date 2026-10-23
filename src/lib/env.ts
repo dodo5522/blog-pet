@@ -1,5 +1,9 @@
-export const publicSiteUrl =
-  import.meta.env.PUBLIC_SITE_URL || "https://example.com";
+import { resolveSiteUrl } from "@/lib/siteUrl";
+
+export const publicSiteUrl = resolveSiteUrl(
+  import.meta.env.PUBLIC_SITE_URL,
+  import.meta.env.SANITY_FALLBACK_MODE,
+);
 export const sanityProjectId =
   import.meta.env.SANITY_PROJECT_ID ||
   import.meta.env.SANITY_STUDIO_PROJECT_ID ||
