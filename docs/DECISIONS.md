@@ -119,3 +119,13 @@ blog-pet 用 Sanity project/dataset は空の状態から開始する。既存�
 - 記事分類は `categories`、投稿者参照は `staff` に統一する。
 - 固定 HTML の情報を再利用する場合は内容を確認して Sanity Studio で新規登録し、自動移行しない。
 - 旧 blog-tech の `/tags/` ルートは引き継がず、カテゴリーの意味が明確な `/categories/` に統一する。
+
+## 2026-10-23: SEOの公開URLを `PUBLIC_SITE_URL` に統一する
+
+公開URLを環境変数から生成し、canonical、OGP、RSS、sitemap、robots.txtに共通で使う。Sanityの `siteSettings.siteUrl` は既存の編集項目として残し、運用時に同じ値へ合わせる。
+
+理由: Astroのsitemapとページのcanonicalが別の設定を参照すると、設定変更時に異なるドメインを出力するため。
+
+影響: 本番ビルドでは公開URLの欠落・仮ドメイン・HTTPを検出して失敗する。CIは固定fallbackデータからSEO生成物を検査し、404をsitemapから除外して `noindex` を出す。AWS配信の実機確認は #6 で行う。
+
+Astro設定はページ側と同じViteの `.env` 読み込み規則を使い、CLIの `--mode` も反映する。設定ファイルから直接使うため、Astroが既に使用しているVite 6.4.2を開発依存に明示した。CIは `build:seo` で通常のローカル表示用fallbackとは別のSEO検証用fixtureを選ぶ。このfixtureには公開URLが異なるCMS設定、SEOの明示値・空白値、画像の優先候補、特殊文字を含む記事を置き、生成HTML・RSSを固定期待値で検査する。画像URLは検証用の仮値で、通常のローカル表示には現れない。本番deployは引き続きSanityの公開データのみを使う。

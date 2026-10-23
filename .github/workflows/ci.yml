@@ -33,7 +33,21 @@ jobs:
       - name: Format check
         run: pnpm format:check
 
-      - name: Build
+      - name: Build SEO verification fixture
+        run: pnpm build:seo
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          SANITY_FALLBACK_MODE: always
+
+      - name: Test
+        run: pnpm test
+
+      - name: Verify generated SEO files
+        run: pnpm test:seo
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+
+      - name: Build site
         run: pnpm build
         env:
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || 'https://example.com' }}
