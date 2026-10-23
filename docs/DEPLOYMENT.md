@@ -78,7 +78,7 @@ Repository Secrets:
 CIは外部Sanityへの接続に左右されないよう `SANITY_FALLBACK_MODE=always` の固定データでビルドし、`pnpm test` と `pnpm test:seo` を実行する。後者は生成したHTML、RSS、sitemap、robots.txtを検査する。ローカルでも次のコマンドで同じ検査を実行できる。
 
 ```bash
-SANITY_FALLBACK_MODE=always PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm build
+SANITY_FALLBACK_MODE=always PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm build:seo
 PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm test:seo
 ```
 

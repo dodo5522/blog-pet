@@ -11,6 +11,7 @@ const requiredRoutes = [
   "/staff/",
   "/blog/",
   "/blog/hello-pet-sitter/",
+  "/blog/visit-note/",
   "/categories/",
   "/categories/work/",
   "/categories/diary/",
@@ -23,10 +24,7 @@ const expectedMetadata = {
     "ペットシッターの活動報告とサービス案内",
     "ペットシッターの日々の活動報告と、ご利用方法・サービスのご案内です。",
   ],
-  "/usage/": [
-    "ご利用方法 | ペットシッター",
-    "お問い合わせからご利用までの流れをご案内します。",
-  ],
+  "/usage/": ["ご利用方法 & 安心サポート", "訪問前のご案内 & 準備"],
   "/price/": [
     "料金 | ペットシッター",
     "サービス料金とご利用条件をご案内します。",
@@ -40,9 +38,10 @@ const expectedMetadata = {
     "ペットシッターの活動報告とお知らせの記事一覧です。",
   ],
   "/blog/hello-pet-sitter/": [
-    "ペットシッターの日々について",
-    "活動報告とサービス案内をお届けするブログです。",
+    "ペットシッターの日々 & ご案内",
+    "活動報告 & サービス案内をお届けします。",
   ],
+  "/blog/visit-note/": ["訪問メモ <春>", "日々の訪問 & お世話の記録です。"],
   "/categories/": [
     "カテゴリー一覧 | ペットシッター",
     "活動報告やお知らせをカテゴリーから探せます。",
@@ -54,7 +53,7 @@ const expectedMetadata = {
   "/categories/diary/": ["日記 | ペットシッター", "ペットシッターの日常"],
   "/categories/news/": [
     "お知らせ | ペットシッター",
-    "サービスに関するお知らせ",
+    "お知らせ に関連する記事一覧",
   ],
   "/access/": [
     "対応エリア・アクセス | ペットシッター",
@@ -66,11 +65,26 @@ const expectedMetadata = {
   ],
   "/404.html": ["404 | ペットシッター", "ページが見つかりません。"],
 };
-const fixturePost = {
-  link: "/blog/hello-pet-sitter/",
-  title: "はじめまして。ペットシッターの日々をお届けします",
-  description: "活動報告とサービス案内をお届けするブログです。",
-  pubDate: "Sun, 19 Apr 2026 00:00:00 GMT",
+const fixturePosts = [
+  {
+    link: "/blog/hello-pet-sitter/",
+    title: "はじめまして。ペットシッターの日々をお届けします",
+    description: "活動報告 & サービス案内をお届けします。",
+    pubDate: "Sun, 19 Apr 2026 00:00:00 GMT",
+  },
+  {
+    link: "/blog/visit-note/",
+    title: "訪問メモ <春>",
+    description: "日々の訪問 & お世話の記録です。",
+    pubDate: "Sat, 18 Apr 2026 00:00:00 GMT",
+  },
+];
+const siteImage = "https://cdn.sanity.io/images/test/site.jpg";
+const expectedImages = {
+  "/usage/": "https://cdn.sanity.io/images/test/usage-og.jpg",
+  "/price/": "https://cdn.sanity.io/images/test/price-hero.jpg",
+  "/blog/hello-pet-sitter/": "https://cdn.sanity.io/images/test/post-og.jpg",
+  "/blog/visit-note/": "https://cdn.sanity.io/images/test/visit-cover.jpg",
 };
 
 function read(root, name) {
@@ -83,7 +97,9 @@ function attribute(tag, name) {
 }
 
 function tagValues(html, tagName, selector, value, wanted) {
-  const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, "g")) ?? [];
+  const tags =
+    html.match(new RegExp(`<${tagName}\\b(?:[^>"']|"[^"]*"|'[^']*')*>`, "g")) ??
+    [];
   return tags
     .filter((tag) => attribute(tag, selector) === value)
     .map((tag) => attribute(tag, wanted));
@@ -198,6 +214,9 @@ function checkHtml(root, route, site, errors) {
       `${label} image: OGP and Twitter image must match or both be absent`,
     );
   }
+  const expectedImage = expectedImages[route] || siteImage;
+  if (decode(ogImage[0]) !== expectedImage)
+    errors.push(`${label} image: expected ${expectedImage}, got ${ogImage[0]}`);
   const card = one(
     tagValues(html, "meta", "name", "twitter:card", "content"),
     `${label} twitter:card`,
@@ -284,11 +303,13 @@ function checkRss(root, site, errors) {
   const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(
     (match) => match[1],
   );
-  if (items.length !== 1)
+  if (items.length !== fixturePosts.length)
     errors.push(
-      `RSS: expected one published fixture post, got ${items.length}`,
+      `RSS: expected ${fixturePosts.length} published fixture posts, got ${items.length}`,
     );
-  for (const item of items) {
+  for (const [index, item] of items.entries()) {
+    const fixturePost = fixturePosts[index];
+    if (!fixturePost) continue;
     for (const [field, expected] of [
       ["title", fixturePost.title],
       ["description", fixturePost.description],

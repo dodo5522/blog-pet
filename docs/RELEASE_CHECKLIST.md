@@ -14,7 +14,7 @@
 - [ ] 下書きが本番ビルドに含まれない
 - [ ] canonical URL が正しい
 - [ ] `PUBLIC_SITE_URL` と Sanity `siteSettings.siteUrl` が公開ドメインと一致する
-- [ ] 固定データでビルド後、`PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm test:seo` が成功する
+- [ ] `SANITY_FALLBACK_MODE=always PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm build:seo` の後、`PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm test:seo` が成功する
 - [ ] sitemap が生成される
 - [ ] RSS が生成される
 - [ ] robots.txt が正しい

@@ -6,6 +6,7 @@ import {
   getPostsByCategorySlug,
   getSiteSettings,
 } from "@/lib/content/api";
+import { firstNonBlank } from "@/lib/seo";
 
 export async function getStaticPaths() {
   const categories = await getCategories();
@@ -25,7 +26,10 @@ if (!category) return Astro.redirect("/404.html");
 <BaseLayout
   siteSettings={siteSettings}
   title={`${category.name} | ${siteSettings.siteTitle}`}
-  description={category.description || `${category.name} に関連する記事一覧`}
+  description={firstNonBlank(
+    category.description,
+    `${category.name} に関連する記事一覧`,
+  )}
   canonicalPath={`/categories/${category.slug}/`}
 >
   <section class="page-header">

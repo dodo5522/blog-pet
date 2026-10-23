@@ -1,10 +1,15 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
-import { resolveSiteUrl } from "./src/lib/siteUrl.ts";
+import { fileURLToPath } from "node:url";
+import {
+  astroModeFromArgs,
+  configuredSiteUrl,
+} from "./src/lib/configuredSiteUrl.mjs";
 
-const site = resolveSiteUrl(
-  process.env.PUBLIC_SITE_URL,
-  process.env.SANITY_FALLBACK_MODE,
+const mode = astroModeFromArgs(process.argv);
+const site = configuredSiteUrl(
+  mode,
+  fileURLToPath(new URL(".", import.meta.url)),
 );
 
 export default defineConfig({
