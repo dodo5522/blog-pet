@@ -11,6 +11,7 @@ import {
   getReadingTimeMinutes,
   getTableOfContents,
 } from "@/lib/content/renderPortableText";
+import { firstNonBlank, selectSeoImage } from "@/lib/seo";
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -28,16 +29,19 @@ if (!post) return Astro.redirect("/404/");
 const readingTime = getReadingTimeMinutes(post.body);
 const tableOfContents = getTableOfContents(post.body);
 const showTableOfContents = tableOfContents.length >= 2;
-const description =
-  post.seoDescription || post.excerpt || siteSettings.defaultSeoDescription;
+const description = firstNonBlank(
+  post.seoDescription,
+  post.excerpt,
+  siteSettings.defaultSeoDescription,
+);
 ---
 
 <BaseLayout
   siteSettings={siteSettings}
-  title={post.seoTitle || post.title}
+  title={firstNonBlank(post.seoTitle, post.title)}
   description={description}
   canonicalPath={`/blog/${post.slug}/`}
-  imageUrl={post.ogImage?.asset?.url || post.coverImage?.asset?.url}
+  imageUrl={selectSeoImage(post.ogImage, post.coverImage)}
   ogType="article"
 >
   <article class="post">

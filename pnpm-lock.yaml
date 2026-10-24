@@ -72,6 +72,9 @@ importers:
       typescript-eslint:
         specifier: 8.42.0
         version: 8.42.0(eslint@9.35.0(jiti@2.7.0))(typescript@5.9.2)
+      vite:
+        specifier: 6.4.2
+        version: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)
 
 packages:
 
@@ -4608,11 +4611,6 @@ packages:
     engines: {node: ^18 || >=20}
     hasBin: true
 
-  nanoid@5.1.9:
-    resolution: {integrity: sha512-ZUvP7KeBLe3OZ1ypw6dI/TzYJuvHP77IM4Ry73waSQTLn8/g8rpdjfyVAh7t1/+FjBtG4lCP42MEbDxOsRpBMw==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
@@ -8474,7 +8472,7 @@ snapshots:
 
   '@sanity/bifur-client@1.0.0':
     dependencies:
-      nanoid: 5.1.9
+      nanoid: 5.1.16
       rxjs: 7.8.2
 
   '@sanity/blueprints-parser@0.4.0': {}
@@ -8593,7 +8591,7 @@ snapshots:
       jsonc-parser: 3.3.1
       lodash-es: 4.18.1
       minimist: 1.2.8
-      nanoid: 5.1.9
+      nanoid: 5.1.16
       oneline: 2.0.0
       open: 11.0.1
       p-map: 7.0.4
@@ -8613,7 +8611,7 @@ snapshots:
       tar: 7.5.13
       tar-fs: 3.1.3
       tar-stream: 3.1.8
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
       tsx: 4.23.12
       typeid-js: 1.2.0
       vite: 7.3.6(@types/node@24.1.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)
@@ -8779,7 +8777,7 @@ snapshots:
       gunzip-maybe: 1.4.2
       p-map: 7.0.4
       tar-fs: 3.1.3
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
     transitivePeerDependencies:
       - '@types/react'
       - bare-abort-controller
@@ -8850,7 +8848,7 @@ snapshots:
       hotscript: 1.0.13
       lodash: 4.18.1
       mendoza: 3.0.8
-      nanoid: 5.1.9
+      nanoid: 5.1.16
       rxjs: 7.8.2
     optionalDependencies:
       xstate: 5.32.5
@@ -11699,8 +11697,6 @@ snapshots:
 
   nanoid@5.1.16: {}
 
-  nanoid@5.1.9: {}
-
   natural-compare@1.4.0: {}
 
   neotraverse@0.6.18: {}
@@ -11977,7 +11973,7 @@ snapshots:
 
   postcss@8.5.10:
     dependencies:
-      nanoid: 3.3.11
+      nanoid: 3.3.18
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
@@ -13195,7 +13191,7 @@ snapshots:
       picomatch: 4.0.4
       postcss: 8.5.10
       rollup: 4.60.2
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
     optionalDependencies:
       '@types/node': 24.1.0
       fsevents: 2.3.3
@@ -13210,7 +13206,7 @@ snapshots:
       picomatch: 4.0.4
       postcss: 8.5.10
       rollup: 4.60.2
-      tinyglobby: 0.2.16
+      tinyglobby: 0.2.17
     optionalDependencies:
       '@types/node': 24.1.0
       fsevents: 2.3.3

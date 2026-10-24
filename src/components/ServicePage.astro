@@ -3,6 +3,7 @@ import PortableText from "@/components/PortableText.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getServicePage, getSiteSettings } from "@/lib/content/api";
 import type { ServicePageKind } from "@/lib/content/types";
+import { firstNonBlank, selectSeoImage } from "@/lib/seo";
 
 interface Props {
   kind: ServicePageKind;
@@ -16,16 +17,19 @@ const [siteSettings, page] = await Promise.all([
   getSiteSettings(),
   getServicePage(kind),
 ]);
-const title = page?.title || defaultTitle;
-const description = page?.seoDescription || defaultDescription;
+const title = firstNonBlank(page?.title, defaultTitle) || defaultTitle;
+const description =
+  firstNonBlank(page?.seoDescription, defaultDescription) || defaultDescription;
+const seoTitle =
+  firstNonBlank(page?.seoTitle) || `${title} | ${siteSettings.siteTitle}`;
 ---
 
 <BaseLayout
   siteSettings={siteSettings}
-  title={`${page?.seoTitle || title} | ${siteSettings.siteTitle}`}
+  title={seoTitle}
   description={description}
   canonicalPath={`/${kind === "usage" ? "usage" : kind === "price" ? "price" : kind === "access" ? "access" : "contact"}/`}
-  imageUrl={page?.ogImage?.asset?.url || page?.heroImage?.asset?.url}
+  imageUrl={selectSeoImage(page?.ogImage, page?.heroImage)}
 >
   <section class="page-header">
     <p class="eyebrow">{eyebrow}</p>

@@ -25,9 +25,13 @@ Sanity Studio で活動報告とサービス案内を管理し、公開済み文
 
 固定のサービス案内文書です。`kind` と `title`、Portable Text の `body` が必須です。`kind` は `usage`（ご利用方法）、`price`（料金）、`access`（アクセス・対応エリア）、`contact`（お問い合わせ）のいずれか一つとし、同じ種別の別文書は Studio の検証で警告します。画像と SEO フィールドは任意です。
 
+`seoTitle` は検索・SNSに表示する完成したタイトルです。入力した場合、サイト名は自動追加しません。未入力ならページタイトルとサイト名を組み合わせます。`seoDescription` がなければ各ページの既定説明文を使います。OGP画像は `ogImage`、`heroImage`、サイト既定画像の順で選びます。
+
 ### Site settings
 
 サイト全体で使う `siteTitle`、`siteUrl`、既定 SEO タイトル・説明文が必須です。`siteTagline`、`defaultOgImage`、`socialLinks`、`contactUrl`、`contactLabel` は任意です。`contactUrl` は http(s) の絶対 URL に限ります。設定文書は1件だけ運用し、取得時に `_id` 順で最初の1件を使います。
+
+`siteUrl` は編集画面に残す公開URLの記録です。canonical、RSS、sitemap、robots.txt のURLはデプロイ環境の `PUBLIC_SITE_URL` から生成します。公開ドメインを変更するときは両方を同じ値に更新してください。値が異なる場合でも公開URLには `PUBLIC_SITE_URL` が使われます。
 
 ## 初期セットアップ
 

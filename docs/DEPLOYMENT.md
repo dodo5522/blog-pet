@@ -61,6 +61,8 @@ Repository Variables:
 - `SANITY_DATASET`
 - `SANITY_API_VERSION`
 
+`PUBLIC_SITE_URL` は公開サイトの正規URLで、現行本番値は `https://pet.blog.uribou.me`。Sanity `siteSettings.siteUrl` も同じ値に合わせる。本番ビルド（`SANITY_FALLBACK_MODE=never`）では値の欠落、HTTP、仮ドメイン、サブパス・クエリ・フラグメント付きURLを拒否する。canonical、OGP、RSS、sitemap、robots.txt はこの変数を参照する。
+
 Repository Secrets:
 
 - `SANITY_PROJECT_ID`
@@ -72,6 +74,15 @@ Repository Secrets:
 - 将来 Environment secrets/variables に移行する場合でも、同じキー名を使えば workflow 側の参照コード変更は不要
 - `deploy-studio.yml` は `terraform -chdir=infra output -raw` で `studio_bucket_name` / `studio_cloudfront_distribution_id` を取得する
 - Terraform state のリージョンには `AWS_REGION` を使う。公開サイトの本番ビルドでは `SANITY_FALLBACK_MODE=never` を workflow 内で固定する
+
+CIは外部Sanityへの接続に左右されないよう `SANITY_FALLBACK_MODE=always` の固定データでビルドし、`pnpm test` と `pnpm test:seo` を実行する。後者は生成したHTML、RSS、sitemap、robots.txtを検査する。ローカルでも次のコマンドで同じ検査を実行できる。
+
+```bash
+SANITY_FALLBACK_MODE=always PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm build:seo
+PUBLIC_SITE_URL=https://pet.blog.uribou.me pnpm test:seo
+```
+
+この検査は固定データの出力を確認するもの。本番SanityのコンテンツとAWS配信の実機確認は #6 の手順で別途行う。404はHTMLに `noindex` を持ちsitemapから除外されるが、HTTPステータスはCloudFront側の設定も確認する。
 
 ---
 
