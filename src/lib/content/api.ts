@@ -18,6 +18,12 @@ import {
   type SanitySiteSettings,
 } from "@/lib/content/siteSettings";
 import { postMatchesCategorySlug } from "@/lib/content/categories";
+import {
+  seoFixtureCategories,
+  seoFixturePosts,
+  seoFixtureServicePages,
+  seoFixtureSiteSettings,
+} from "@/lib/content/seoFixture";
 import type {
   Category,
   Post,
@@ -41,6 +47,18 @@ type SanityFetchResult<T> =
 
 const fetchCache = new Map<string, Promise<SanityFetchResult<unknown>>>();
 const fallbackModes = new Set(["auto", "always", "never"]);
+const useSeoFixture =
+  import.meta.env.MODE === "seo-test" && sanityFallbackMode === "always";
+const localSiteSettings = useSeoFixture
+  ? seoFixtureSiteSettings
+  : fallbackSiteSettings;
+const localPosts = useSeoFixture ? seoFixturePosts : fallbackPosts;
+const localCategories = useSeoFixture
+  ? seoFixtureCategories
+  : fallbackCategories;
+const localServicePages = useSeoFixture
+  ? seoFixtureServicePages
+  : fallbackServicePages;
 
 function normalizedFallbackMode(): "auto" | "always" | "never" {
   return fallbackModes.has(sanityFallbackMode)
@@ -123,12 +141,12 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       );
     }
   }
-  return fallbackSiteSettings;
+  return localSiteSettings;
 }
 
 export async function getPublishedPosts(): Promise<PostSummary[]> {
   const result = await fetchSanity<PostSummary[]>(POSTS_QUERY);
-  return result.ok ? result.data : fallbackPosts;
+  return result.ok ? result.data : localPosts;
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
@@ -137,12 +155,12 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     return result.data;
   }
 
-  return fallbackPosts.find((entry) => entry.slug === slug) || null;
+  return localPosts.find((entry) => entry.slug === slug) || null;
 }
 
 export async function getCategories(): Promise<Category[]> {
   const result = await fetchSanity<Category[]>(CATEGORIES_QUERY);
-  return result.ok ? result.data : fallbackCategories;
+  return result.ok ? result.data : localCategories;
 }
 
 export async function getPostsByCategorySlug(
@@ -166,5 +184,5 @@ export async function getServicePage(
   );
   return result.ok
     ? result.data
-    : (fallbackServicePages.find((page) => page.kind === kind) ?? null);
+    : (localServicePages.find((page) => page.kind === kind) ?? null);
 }

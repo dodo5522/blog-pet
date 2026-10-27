@@ -1,8 +1,9 @@
 import rss from "@astrojs/rss";
-import type { APIContext } from "astro";
 import { getPublishedPosts, getSiteSettings } from "@/lib/content/api";
+import { publicSiteUrl } from "@/lib/env";
+import { rssItems } from "@/lib/rss";
 
-export async function GET(context: APIContext) {
+export async function GET() {
   const [siteSettings, posts] = await Promise.all([
     getSiteSettings(),
     getPublishedPosts(),
@@ -11,12 +12,8 @@ export async function GET(context: APIContext) {
   return rss({
     title: siteSettings.siteTitle,
     description: siteSettings.defaultSeoDescription,
-    site: context.site || siteSettings.siteUrl,
-    items: posts.map((post) => ({
-      title: post.title,
-      description: post.seoDescription || post.excerpt,
-      pubDate: new Date(post.publishedAt),
-      link: `/blog/${post.slug}/`,
-    })),
+    site: publicSiteUrl,
+    items: rssItems(posts, publicSiteUrl),
+    customData: "<language>ja</language>",
   });
 }

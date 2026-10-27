@@ -23,6 +23,8 @@ export const siteSettingsType = defineType({
       name: "siteUrl",
       title: "Site URL",
       type: "url",
+      description:
+        "公開URLの記録です。変更時は配信のPUBLIC_SITE_URLも同じ値に合わせてください。正規URLの生成にはPUBLIC_SITE_URLを使用します。",
       validation: (rule) =>
         rule
           .required()

@@ -95,6 +95,8 @@ export const servicePageType = defineType({
       name: "seoTitle",
       title: "SEO タイトル",
       type: "string",
+      description:
+        "検索結果やSNSに表示する完成したタイトルです。サイト名は自動追加しません。",
       validation: (rule) => rule.max(70),
     }),
     defineField({
