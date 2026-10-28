@@ -46,7 +46,18 @@ export const postType = defineType({
         }),
         defineArrayMember({ type: "codeBlock" }),
       ],
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.required().custom((blocks) =>
+          blocks?.some((block) => {
+            const image = block as {
+              _type?: string;
+              asset?: { _ref?: string };
+            };
+            return image._type === "image" && !image.asset?._ref;
+          })
+            ? "本文内の画像には画像ファイルを選択してください。"
+            : true,
+        ),
     }),
     defineField({
       name: "publishedAt",
