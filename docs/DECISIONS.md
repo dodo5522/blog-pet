@@ -11,6 +11,12 @@ Astro、Sanity、GitHub Actions、S3、CloudFront による静的サイト構成
 - v6 移行で変更される auth provider と検索の既定動作は、本リポジトリではカスタム設定をしていないため追加対応しない
 - Sanity のスキーマ、保存データ形式、公開サイトの Astro/Sanity 取得処理は変更しない
 
+参照:
+
+- [Studio v5 to v6 migration guide](https://www.sanity.io/docs/help/v5-to-v6)
+- [Sanity Studio v6.9.2 changelog: Portable Text image upload dialog fix](https://www.sanity.io/docs/changelog/studio-Ni45LjE)
+- [Sanity Studio v6.14.1 changelog: v6.9.2–v6.14.0 data-loss fix and deprecation](https://www.sanity.io/docs/changelog/studio-Ni4xNC4w)
+
 理由:
 
 - Firefox で本文の Image ブロックからローカル画像を Upload するとブロックが空のまま編集画面へ戻る一方、同じ画像のドラッグ＆ドロップでは正常にアップロードできる。Sanity の公式 changelog に、Portable Text 内で新しい画像をアップロードすると画像ブロックの編集ダイアログが閉じてアップロードをキャンセルする不具合と、その修正が記載されている
@@ -21,6 +27,7 @@ Astro、Sanity、GitHub Actions、S3、CloudFront による静的サイト構成
 
 - Sanity Studio のメジャーバージョン更新により Studio のビルド成果物と依存 lockfile が更新される
 - Node.js 24 と React 19.3.1 は v6 の要件を満たす
+- pnpm は `@rolldown/plugin-babel` の Vite peer と `@sanity/workflow-blueprint` の TypeScript peer に任意依存関係の警告を出す。Sanity Studio と Astro のビルドは成功しており、このサイトでは Workflows を使用しない。Astro と互換性のない Vite への更新や、利用していない Workflows のための TypeScript 更新は行わない
 - 更新した Studio は本番へ再デプロイし、Firefox で Upload 操作と Portable Text への画像挿入を確認する
 
 ## 2026-10-13: 技術記事専用の執筆・import ツールを削除する
