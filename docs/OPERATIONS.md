@@ -51,7 +51,7 @@ Sanity Studio の依存関係やスキーマを更新した場合は、デプロ
 3. Post、Category、Staff、Service page、Site settings が通常どおり表示されることを確認する
 4. Sanity Dashboard の Content Agent を開き、対象 project/dataset のスキーマを認識できることを確認する
 
-Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリは `sanity` と `@sanity/vision` を 5.31.2 に固定している。Studio を開く操作は、デプロイ済みスキーマを Sanity 側へ登録するために必要であり、CI だけでは代替しない。
+Content Agent は Studio 5.1.0 以上を必要とする。このリポジトリは `sanity` と `@sanity/vision` を 6.20.0 に固定している。Studio を開く操作は、デプロイ済みスキーマを Sanity 側へ登録するために必要であり、CI だけでは代替しない。
 
 ### Studio インフラ変更時の運用
 

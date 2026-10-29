@@ -4,6 +4,25 @@
 
 Astro、Sanity、GitHub Actions、S3、CloudFront による静的サイト構成を引き継ぐ。公開サイトの表示時にコンテンツ API や独自バックエンドへ依存しないため、運用コストと保守負担を抑えられる。
 
+## 2026-10-29: Portable Text の画像アップロード不具合修正のため Sanity Studio v6 へ更新する
+
+- `sanity` と `@sanity/vision` を `6.20.0` に揃え、React と React DOM を `19.3.1` に揃える
+- Sanity Studio の Portable Text 画像アップロード時に画像ブロック編集ダイアログが閉じ、アップロードがキャンセルされる不具合への公式修正を取り込む
+- v6 移行で変更される auth provider と検索の既定動作は、本リポジトリではカスタム設定をしていないため追加対応しない
+- Sanity のスキーマ、保存データ形式、公開サイトの Astro/Sanity 取得処理は変更しない
+
+理由:
+
+- Firefox で本文の Image ブロックからローカル画像を Upload するとブロックが空のまま編集画面へ戻る一方、同じ画像のドラッグ＆ドロップでは正常にアップロードできる。Sanity の公式 changelog に、Portable Text 内で新しい画像をアップロードすると画像ブロックの編集ダイアログが閉じてアップロードをキャンセルする不具合と、その修正が記載されている
+- 修正は Studio v6 系に含まれる。最初に修正が記載された v6.9.2 から v6.14.0 には別のデータ損失不具合があり deprecated になっているため、その修正を含む v6.20.0 を採用する
+- v6.20.0 が解決するのは画像アップロード時のダイアログ終了動作であり、Firefox 固有の原因と断定はしない
+
+影響:
+
+- Sanity Studio のメジャーバージョン更新により Studio のビルド成果物と依存 lockfile が更新される
+- Node.js 24 と React 19.3.1 は v6 の要件を満たす
+- 更新した Studio は本番へ再デプロイし、Firefox で Upload 操作と Portable Text への画像挿入を確認する
+
 ## 2026-10-13: 技術記事専用の執筆・import ツールを削除する
 
 Markdown からの技術記事 Draft import、技術文書専用の textlint、ChatGPT共有リンクの記事化は、ペットシッターサイトの運用範囲に含めない。Sanity Studio で活動報告とサービス案内を編集する運用に統一する。
@@ -30,6 +49,8 @@ Markdown からの技術記事 Draft import、技術文書専用の textlint、C
 - textlint、技術文書プリセット、prh、markdownlint-cli2が開発依存に加わり、mise管理ツールにuvが加わる
 
 ## 2026-08-23: Sanity Studio v5 系で Content Agent 対応を行う
+
+この判断は 2026-10-29 の Portable Text 画像アップロード不具合対応により更新した。
 
 - `sanity` と `@sanity/vision` を `5.31.2` に揃える
 - Content Agent の最低要件である Studio `5.1.0` 以上を満たしつつ、今回の更新では v6 への追加メジャーアップグレードを行わない
