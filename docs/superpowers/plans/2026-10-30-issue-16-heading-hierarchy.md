@@ -20,8 +20,9 @@
 ## Review Focus
 
 - Existing Sanity documents contain body headings styled as `h1`; these must render as `h2` after deployment.
-- Legacy body `h1` headings must participate in heading IDs and the table of contents as level 2.
+- Legacy body `h1` headings must participate in heading IDs and the table of contents as level 2 without changing existing `h2` / `h3` anchors.
 - Duplicate heading text must continue to receive unique IDs.
+- Headings nested in Portable Text lists must keep their rendered IDs aligned with table-of-contents links.
 - Article and service-page Portable Text must share the same `h2` / `h3` typography and spacing.
 - Heading styles not available in the editor must not be introduced for newly edited documents.
 
@@ -53,7 +54,8 @@ The issue's acceptance criteria call for a single page `h1`, constrained body st
 
 - Add a renderer handler for legacy `h1` blocks that emits an `h2` with the same stable generated ID behavior as an `h2` block.
 - Treat legacy `h1` as level 2 when building the table of contents.
-- Preserve `h2` / `h3` IDs and duplicate-heading suffix behavior.
+- Preserve `h2` / `h3` IDs and duplicate-heading suffix behavior when adding legacy `h1` blocks to the outline.
+- Resolve rendered heading IDs by the stable Portable Text `_key` when serialization clones list blocks.
 
 ### 3. Unify body heading styles and document the model
 

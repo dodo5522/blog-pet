@@ -96,27 +96,47 @@ function headingBaseId(value: string): string {
 function collectHeadings(blocks: PortableTextBlock[]) {
   const counts = new Map<string, number>();
   const ids = new Map<PortableTextBlock, string>();
-  const items: TableOfContentsItem[] = [];
+  const idsByKey = new Map<string, string>();
+  const headingBlocks = blocks.filter(
+    (block) =>
+      (block.style === "h1" || block.style === "h2" || block.style === "h3") &&
+      headingText(block),
+  );
 
-  for (const block of blocks) {
-    if (block.style !== "h1" && block.style !== "h2" && block.style !== "h3")
-      continue;
+  // Reserve the IDs h2/h3 already used before legacy h1 blocks were included.
+  for (const block of headingBlocks) {
+    if (block.style === "h1") continue;
     const text = headingText(block);
-    if (!text) continue;
-
     const baseId = headingBaseId(text);
     const count = (counts.get(baseId) || 0) + 1;
     counts.set(baseId, count);
     const id = count === 1 ? baseId : `${baseId}-${count}`;
     ids.set(block, id);
-    items.push({
-      id,
-      level: block.style === "h3" ? 3 : 2,
-      text,
-    });
+    if (block._key) idsByKey.set(block._key, id);
   }
 
-  return { items, ids };
+  const usedIds = new Set(ids.values());
+  for (const block of headingBlocks) {
+    if (block.style !== "h1") continue;
+    const baseId = headingBaseId(headingText(block));
+    let id = baseId;
+    let suffix = 2;
+    while (usedIds.has(id)) {
+      id = `${baseId}-${suffix}`;
+      suffix += 1;
+    }
+    usedIds.add(id);
+    ids.set(block, id);
+    if (block._key) idsByKey.set(block._key, id);
+  }
+
+  const items = headingBlocks.map((block) => ({
+    id: ids.get(block)!,
+    level: block.style === "h3" ? (3 as const) : (2 as const),
+    text: headingText(block),
+  }));
+
+  return { items, ids, idsByKey };
 }
 
 export function getTableOfContents(
@@ -128,23 +148,25 @@ export function getTableOfContents(
 function renderedHeadingId(
   value: unknown,
   ids: Map<PortableTextBlock, string>,
+  idsByKey: Map<string, string>,
 ): string {
   const block = value as PortableTextBlock;
-  return ids.get(block) || headingBaseId(headingText(block));
+  const idByKey = block._key ? idsByKey.get(block._key) : undefined;
+  return idByKey || ids.get(block) || headingBaseId(headingText(block));
 }
 
 export function renderPortableText(blocks: PortableTextBlock[]): string {
-  const { ids } = collectHeadings(blocks);
+  const { ids, idsByKey } = collectHeadings(blocks);
 
   return toHTML(blocks, {
     components: {
       block: {
         h1: ({ children, value }) =>
-          `<h2 id="${escapeHtml(renderedHeadingId(value, ids))}">${children}</h2>`,
+          `<h2 id="${escapeHtml(renderedHeadingId(value, ids, idsByKey))}">${children}</h2>`,
         h2: ({ children, value }) =>
-          `<h2 id="${escapeHtml(renderedHeadingId(value, ids))}">${children}</h2>`,
+          `<h2 id="${escapeHtml(renderedHeadingId(value, ids, idsByKey))}">${children}</h2>`,
         h3: ({ children, value }) =>
-          `<h3 id="${escapeHtml(renderedHeadingId(value, ids))}">${children}</h3>`,
+          `<h3 id="${escapeHtml(renderedHeadingId(value, ids, idsByKey))}">${children}</h3>`,
       },
       types: {
         codeBlock: ({ value }: { value: PortableTextBlock }) => {
