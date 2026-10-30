@@ -99,7 +99,8 @@ function collectHeadings(blocks: PortableTextBlock[]) {
   const items: TableOfContentsItem[] = [];
 
   for (const block of blocks) {
-    if (block.style !== "h2" && block.style !== "h3") continue;
+    if (block.style !== "h1" && block.style !== "h2" && block.style !== "h3")
+      continue;
     const text = headingText(block);
     if (!text) continue;
 
@@ -108,7 +109,11 @@ function collectHeadings(blocks: PortableTextBlock[]) {
     counts.set(baseId, count);
     const id = count === 1 ? baseId : `${baseId}-${count}`;
     ids.set(block, id);
-    items.push({ id, level: block.style === "h2" ? 2 : 3, text });
+    items.push({
+      id,
+      level: block.style === "h3" ? 3 : 2,
+      text,
+    });
   }
 
   return { items, ids };
@@ -134,6 +139,8 @@ export function renderPortableText(blocks: PortableTextBlock[]): string {
   return toHTML(blocks, {
     components: {
       block: {
+        h1: ({ children, value }) =>
+          `<h2 id="${escapeHtml(renderedHeadingId(value, ids))}">${children}</h2>`,
         h2: ({ children, value }) =>
           `<h2 id="${escapeHtml(renderedHeadingId(value, ids))}">${children}</h2>`,
         h3: ({ children, value }) =>

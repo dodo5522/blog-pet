@@ -71,7 +71,14 @@ export const servicePageType = defineType({
       title: "本文",
       type: "array",
       of: [
-        defineArrayMember({ type: "block" }),
+        defineArrayMember({
+          type: "block",
+          styles: [
+            { title: "Normal", value: "normal" },
+            { title: "Heading 2", value: "h2" },
+            { title: "Heading 3", value: "h3" },
+          ],
+        }),
         defineArrayMember({
           type: "image",
           fields: [

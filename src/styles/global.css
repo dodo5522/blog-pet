@@ -374,13 +374,6 @@ img {
   max-width: var(--reading-width);
   padding: clamp(1.5rem, 4vw, 3rem);
 }
-.prose-card h2 {
-  margin: 2.5rem 0 0.75rem;
-  font: 650 1.4rem/1.4 var(--font-mono);
-}
-.prose-card h2:first-child {
-  margin-top: 0;
-}
 .prose-card p {
   color: var(--ledger-muted);
   line-height: 1.9;
@@ -505,6 +498,9 @@ img {
   padding-top: 1.25rem;
   border-top: 1px solid var(--ledger-border);
   font-size: clamp(1.55rem, 3vw, 2rem);
+}
+.portable-text > :first-child:is(h2, h3) {
+  margin-top: 0;
 }
 .portable-text h2::before {
   content: "## ";
