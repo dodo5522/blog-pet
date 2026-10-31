@@ -165,7 +165,7 @@ img {
   font-size: clamp(2.35rem, 5.5vw, 4.8rem);
   line-height: 1.03;
 }
-.hero > p:not(.eyebrow),
+.hero__introduction,
 .page-header > p:not(.eyebrow),
 .post__excerpt {
   max-width: 64ch;
@@ -173,6 +173,13 @@ img {
   color: var(--ledger-muted);
   font-size: clamp(1rem, 2vw, 1.12rem);
   line-height: 1.9;
+}
+.hero__introduction p {
+  margin: 0 0 1rem;
+  white-space: pre-line;
+}
+.hero__introduction p:last-child {
+  margin-bottom: 0;
 }
 .hero__actions {
   display: flex;

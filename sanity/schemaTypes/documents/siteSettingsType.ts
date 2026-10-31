@@ -41,6 +41,8 @@ export const siteSettingsType = defineType({
       title: "Default SEO description",
       type: "text",
       rows: 3,
+      description:
+        "トップページの紹介文にも使います。空行で段落を分けてください。1つの段落内の改行は表示時に維持されます。",
       validation: (rule) => rule.required().max(180),
     }),
     defineField({
