@@ -502,17 +502,9 @@ img {
 .portable-text > :first-child:is(h2, h3) {
   margin-top: 0;
 }
-.portable-text h2::before {
-  content: "## ";
-  color: var(--ledger-copper);
-}
 .portable-text h3 {
   margin: 2.75rem 0 0.8rem;
   font-size: 1.3rem;
-}
-.portable-text h3::before {
-  content: "### ";
-  color: var(--ledger-copper);
 }
 .portable-text h4 {
   margin: 2rem 0 0.65rem;
