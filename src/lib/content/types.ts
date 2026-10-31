@@ -60,6 +60,8 @@ export interface PortableTextBlock {
   filename?: string;
   alt?: string;
   asset?: SanityImageAsset;
+  url?: string;
+  title?: string;
 }
 
 export interface PortableTextTableCell {

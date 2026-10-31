@@ -1,5 +1,6 @@
 import { toHTML } from "@portabletext/to-html";
 import { toPlainText } from "@portabletext/toolkit";
+import { getGoogleMapsEmbedUrl } from "./googleMapsEmbed.ts";
 import type {
   PortableTextBlock,
   PortableTextSpan,
@@ -203,6 +204,13 @@ export function renderPortableText(blocks: PortableTextBlock[]): string {
             ? `<figcaption>${escapeHtml(value.alt)}</figcaption>`
             : "";
           return `<figure><img src="${escapeHtml(src)}" alt="${alt}" loading="lazy" decoding="async" />${caption}</figure>`;
+        },
+        googleMapsEmbed: ({ value }: { value: PortableTextBlock }) => {
+          const src = getGoogleMapsEmbedUrl(value.url);
+          if (!src) return "";
+
+          const title = escapeHtml(value.title?.trim() || "対応エリアの地図");
+          return `<div class="map-embed"><iframe src="${escapeHtml(src)}" title="${title}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
         },
       },
       marks: {
