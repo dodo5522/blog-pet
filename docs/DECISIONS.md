@@ -1,5 +1,23 @@
 # DECISIONS.md
 
+## 2026-10-31: Google Maps は専用 Portable Text ブロックで表示する
+
+- Service page 本文に Google Maps 埋め込みブロックを追加し、URLと任意の地図タイトルだけを入力する。
+- 公開側では HTTPS、`www.google.com`、`/maps/embed`、非空の `pb` クエリを検証したURLだけを iframe として静的出力する。
+- iframe の title、lazy loading、referrer policy を付け、レスポンシブな比率で表示する。
+- 本文に任意HTMLを許可しない。既存の iframe タグ文字列はURLを専用ブロックへ手動で移し替える。
+
+理由:
+
+- Google Maps iframe タグを本文に貼り付けても、Portable Text renderer はタグをテキストとして扱い、HTMLとして描画しない。
+- 任意HTMLを有効化せず、サイトが必要とする地図だけを明示的に許可する方が、入力の範囲と出力を検証しやすい。
+
+影響:
+
+- 新スキーマ反映後、地図を掲載する編集者は共有iframeの `src` URLを専用ブロックに設定する。
+- iframe は地図URLを読み込むため、閲覧者のブラウザはGoogle Mapsへ接続する。
+- 既存コンテンツは自動変更しない。
+
 ## 2026-10-31: Sanity Portable Text の組み込み表編集機能を使う
 
 - Post と Service page の本文に表を追加できるよう、Sanity Studio の Portable Text 組み込み表編集機能を有効にする。

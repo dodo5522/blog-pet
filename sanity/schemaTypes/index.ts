@@ -5,6 +5,7 @@ import { siteSettingsType } from "./documents/siteSettingsType";
 import { staffType } from "./documents/staffType";
 import { codeBlockType } from "./objects/codeBlockType";
 import { imageWithAltType } from "./objects/imageWithAltType";
+import { googleMapsEmbedType } from "./objects/googleMapsEmbedType";
 import { socialLinkType } from "./objects/socialLinkType";
 import { tableType } from "./objects/tableType";
 
@@ -16,6 +17,7 @@ export const schemaTypes = [
   siteSettingsType,
   codeBlockType,
   imageWithAltType,
+  googleMapsEmbedType,
   socialLinkType,
   tableType,
 ];

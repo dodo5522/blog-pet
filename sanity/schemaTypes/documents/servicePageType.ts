@@ -70,6 +70,8 @@ export const servicePageType = defineType({
       name: "body",
       title: "本文",
       type: "array",
+      description:
+        "アクセス・対応エリアでは、見出しで訪問可能エリア・訪問条件・事業者登録情報を分け、確認済みの情報だけを掲載してください。登録情報の項目整理には表を、地図表示にはGoogle Maps地図ブロックを使えます。",
       of: [
         defineArrayMember({
           type: "block",
@@ -91,6 +93,7 @@ export const servicePageType = defineType({
           ],
         }),
         defineArrayMember({ type: "table" }),
+        defineArrayMember({ type: "googleMapsEmbed" }),
       ],
       validation: (rule) =>
         rule.required().custom((blocks) =>

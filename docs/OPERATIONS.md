@@ -42,6 +42,8 @@ blog-tech から引き継ぐ運用手順を記録する。blog-pet のコンテ�
 3. `Build` / `s3 sync dist-studio/` / CloudFront invalidation が成功していることを確認する
 4. Studio の CloudFront URL で更新が反映されていることを確認する
 
+Service page の地図スキーマを変更した場合は、デプロイ済み Studio を開いてスキーマ反映後、本文に保存済みの iframe タグ文字列から `src` URLを `Google Maps 地図` ブロックへ移し替えて Publish します。任意の iframe タグ全体は貼り付けません。Site の自動デプロイ完了後、対応エリアページで地図表示とモバイル幅を確認します。対応地域や訪問条件の文章は、運営者が確認した内容だけを編集・公開します。
+
 ### Content Agent 接続の確認
 
 Sanity Studio の依存関係やスキーマを更新した場合は、デプロイ後に次を行う。
