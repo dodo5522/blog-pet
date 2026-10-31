@@ -10,6 +10,10 @@ const postCard = readFileSync(
   new URL("../src/components/PostCard.astro", import.meta.url),
   "utf8",
 );
+const globalStyles = readFileSync(
+  new URL("../src/styles/global.css", import.meta.url),
+  "utf8",
+);
 
 test("ホームの猫写真はローカル画像と説明的な代替テキストを使う", () => {
   assert.ok(
@@ -35,4 +39,14 @@ test("記事カードは cover image があるときだけ画像を出す", () =
   );
   assert.ok(/class="post-card__cover"/.test(postCard));
   assert.ok(/loading="lazy"/.test(postCard));
+});
+
+test("ヘッダーとフッターのリンクは44pxの操作領域を持つ", () => {
+  const navigationLinkRule = globalStyles.match(
+    /\.site-header__nav a,\s*\.site-footer__links a\s*\{([^}]+)\}/,
+  )?.[1];
+
+  assert.ok(navigationLinkRule, "共通ナビゲーションリンクのスタイルを定義する");
+  assert.match(navigationLinkRule, /display:\s*inline-flex/);
+  assert.match(navigationLinkRule, /min-height:\s*44px/);
 });

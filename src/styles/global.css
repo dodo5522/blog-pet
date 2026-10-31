@@ -105,6 +105,9 @@ img {
 }
 .site-header__nav a,
 .site-footer__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--ledger-muted);
   font-size: 0.88rem;
   text-decoration: none;
