@@ -21,7 +21,7 @@
 
 - Sanity's table editor requires `headerRows` and canonical nested `table` / `row` / `cell` types — build Studio and inspect the registered schema.
 - A header row emits `th scope="col"` in `thead`, while non-header rows emit `td` in `tbody` — add a real renderer test.
-- Empty/malformed table rows and cells do not crash the static build — add renderer tests.
+- Empty/malformed table rows, null cell blocks, and null spans do not crash the static build — add renderer tests, including a mixed valid/invalid cell.
 - Markdown table-looking code blocks render as escaped code rather than as tables — add a regression test.
 - Narrow screens scroll the table container rather than the page — verify CSS and generated wrapper.
 

@@ -2,6 +2,7 @@ import { toHTML } from "@portabletext/to-html";
 import { toPlainText } from "@portabletext/toolkit";
 import type {
   PortableTextBlock,
+  PortableTextSpan,
   PortableTextTable,
   PortableTextTableRow,
 } from "@/lib/content/types";
@@ -102,6 +103,39 @@ function renderedHeadingId(
   return idByKey || ids.get(block) || headingBaseId(headingText(block));
 }
 
+function isPortableTextSpan(value: unknown): value is PortableTextSpan {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      (value as PortableTextSpan)._type === "span" &&
+      typeof (value as PortableTextSpan).text === "string" &&
+      ((value as PortableTextSpan).marks === undefined ||
+        Array.isArray((value as PortableTextSpan).marks)),
+  );
+}
+
+function normalizeTableCellBlocks(value: unknown): PortableTextBlock[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.flatMap((candidate) => {
+    if (
+      !candidate ||
+      typeof candidate !== "object" ||
+      (candidate as PortableTextBlock)._type !== "block"
+    ) {
+      return [];
+    }
+
+    const block = candidate as PortableTextBlock;
+    const children = Array.isArray(block.children)
+      ? block.children.filter(isPortableTextSpan)
+      : [];
+    const markDefs = Array.isArray(block.markDefs) ? block.markDefs : [];
+
+    return [{ ...block, children, markDefs }];
+  });
+}
+
 function renderPortableTextTable(value: PortableTextTable): string {
   const rows = (Array.isArray(value.rows) ? value.rows : []).filter(
     (row): row is PortableTextTableRow =>
@@ -118,7 +152,7 @@ function renderPortableTextTable(value: PortableTextTable): string {
     const cells = (row.cells || [])
       .map(
         (cell) =>
-          `<${cellTag}>${renderPortableText(Array.isArray(cell?.value) ? cell.value : [])}</${isHeader ? "th" : "td"}>`,
+          `<${cellTag}>${renderPortableText(normalizeTableCellBlocks(cell?.value))}</${isHeader ? "th" : "td"}>`,
       )
       .join("");
     return `<tr>${cells}</tr>`;

@@ -76,6 +76,32 @@ test("skips empty or malformed Portable Text tables", () => {
   );
 });
 
+test("ignores malformed Portable Text blocks inside table cells", () => {
+  const table = tableBlock(1, [
+    [
+      {
+        _type: "cell",
+        value: [null, ...tableCell("valid", "Kept content").value],
+      },
+    ],
+    [
+      {
+        _type: "cell",
+        value: [
+          {
+            _type: "block",
+            style: "normal",
+            children: [null],
+          },
+        ],
+      },
+    ],
+  ]);
+
+  assert.doesNotThrow(() => renderPortableText([table]));
+  assert.match(renderPortableText([table]), /<p>Kept content<\/p>/);
+});
+
 test("keeps Markdown table-looking code blocks as code", () => {
   const markdownTable = [
     "| サービス | 料金 |",
