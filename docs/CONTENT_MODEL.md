@@ -34,7 +34,7 @@ Sanity Studio で活動報告とサービス案内を管理し、公開済み文
 
 ### Site settings
 
-サイト全体で使う `siteTitle`、`siteUrl`、既定 SEO タイトル・説明文が必須です。`siteTagline`、`defaultOgImage`、`socialLinks`、`contactUrl`、`contactLabel` は任意です。`contactUrl` は http(s) の絶対 URL に限ります。設定文書は1件だけ運用し、取得時に `_id` 順で最初の1件を使います。
+サイト全体で使う `siteTitle`、`siteUrl`、既定 SEO タイトル・説明文が必須です。`defaultSeoDescription` はトップページの紹介文にも使い、空行で分けた複数段落として表示します。段落内の改行は維持され、前後の空白や空行だけの段落は表示しません。`siteTagline`、`defaultOgImage`、`socialLinks`、`contactUrl`、`contactLabel` は任意です。`contactUrl` は http(s) の絶対 URL に限ります。設定文書は1件だけ運用し、取得時に `_id` 順で最初の1件を使います。
 
 `siteUrl` は編集画面に残す公開URLの記録です。canonical、RSS、sitemap、robots.txt のURLはデプロイ環境の `PUBLIC_SITE_URL` から生成します。公開ドメインを変更するときは両方を同じ値に更新してください。値が異なる場合でも公開URLには `PUBLIC_SITE_URL` が使われます。
 

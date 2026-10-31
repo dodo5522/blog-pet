@@ -6,6 +6,7 @@ import {
   getPublishedPosts,
   getSiteSettings,
 } from "@/lib/content/api";
+import { splitTextParagraphs } from "@/lib/content/textParagraphs";
 
 const [siteSettings, posts, categories] = await Promise.all([
   getSiteSettings(),
@@ -13,6 +14,17 @@ const [siteSettings, posts, categories] = await Promise.all([
   getCategories(),
 ]);
 const recentPosts = posts.slice(0, 3);
+const introductionParagraphs = splitTextParagraphs(
+  siteSettings.defaultSeoDescription,
+);
+if (introductionParagraphs.length > 0) {
+  introductionParagraphs[introductionParagraphs.length - 1] +=
+    " 大切な家族がいつもの場所で安心して過ごせるよう、日々の活動やサービスをご紹介します。";
+} else {
+  introductionParagraphs.push(
+    "大切な家族がいつもの場所で安心して過ごせるよう、日々の活動やサービスをご紹介します。",
+  );
+}
 ---
 
 <BaseLayout siteSettings={siteSettings}>
@@ -20,9 +32,9 @@ const recentPosts = posts.slice(0, 3);
     <div class="hero__copy">
       <p class="eyebrow">ペットシッターのご案内</p>
       <h1>{siteSettings.siteTagline}</h1>
-      <p>
-        {siteSettings.defaultSeoDescription} 大切な家族がいつもの場所で安心して過ごせるよう、日々の活動やサービスをご紹介します。
-      </p>
+      <div class="hero__introduction">
+        {introductionParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
       <div class="hero__actions">
         <a class="button" href="/usage/"
           >ご利用方法を見る <span aria-hidden="true">→</span></a
