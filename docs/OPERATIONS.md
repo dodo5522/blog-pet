@@ -4,6 +4,8 @@ blog-tech から引き継ぐ運用手順を記録する。blog-pet のコンテ�
 
 ## 日常運用
 
+過去記事の一括取り込みは [Markdown取り込み手順](MARKDOWN_IMPORT.md) を参照する。
+
 ### 活動報告を追加する
 
 1. Sanity Studio を開く

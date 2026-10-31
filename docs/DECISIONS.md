@@ -183,3 +183,12 @@ blog-pet 用 Sanity project/dataset は空の状態から開始する。既存�
 影響: 本番ビルドでは公開URLの欠落・仮ドメイン・HTTPを検出して失敗する。CIは固定fallbackデータからSEO生成物を検査し、404をsitemapから除外して `noindex` を出す。AWS配信の実機確認は #6 で行う。
 
 Astro設定はページ側と同じViteの `.env` 読み込み規則を使い、CLIの `--mode` も反映する。設定ファイルから直接使うため、Astroが既に使用しているVite 6.4.2を開発依存に明示した。CIは `build:seo` で通常のローカル表示用fallbackとは別のSEO検証用fixtureを選ぶ。このfixtureには公開URLが異なるCMS設定、SEOの明示値・空白値、画像の優先候補、特殊文字を含む記事を置き、生成HTML・RSSを固定期待値で検査する。画像URLは検証用の仮値で、通常のローカル表示には現れない。本番deployは引き続きSanityの公開データのみを使う。
+
+
+## 2026-10-31: 過去記事は専用 CLI で下書きへ取り込む
+
+運営者の依頼により、過去記事の Markdown と画像を取り込む `scripts/import-markdown.mjs` を追加する。Astro のビルド処理とは分け、`--env` で指定したファイル（既定: `~/.config/sanity/blog-pet.env`）から書き込み用の設定を読み込む。公開サイトの認証情報は変更しない。
+
+旧 WordPress ID から固定 ID と slug を生成し、既存の記事は上書きしない。元の公開状態にかかわらず記事とカテゴリーは下書きにする。日付だけの旧投稿日は日本時間の午前0時として扱う。画像欠落時は書き込み前に停止し、代替テキストの空欄には要確認の仮文を設定する。実行手順と制約は [Markdown取り込み手順](MARKDOWN_IMPORT.md) を参照する。画像4件の補完は [Issue #30](https://github.com/dodo5522/blog-pet/issues/30) で管理する。
+
+取り込み元を置く `tmp/` は TypeScript の検査対象から除外する。旧サイトに保存された JavaScript の構文がアプリケーションのビルドを妨げるためで、Astro のソースや取り込みスクリプトは従来どおり検査する。

@@ -28,7 +28,7 @@ importers:
         version: 6.20.0(@babel/runtime@7.29.7)(@codemirror/theme-one-dark@6.1.3)(@shikijs/themes@3.23.0)(@types/react@19.2.14)(codemirror@6.0.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sanity@6.20.0(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@rolldown/plugin-babel@0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(@sanity/workflow-blueprint@0.36.0(@sanity/workflow-engine@0.36.0(@types/react@19.2.14)(typescript@5.9.2))(typescript@5.9.2))(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(prismjs@1.30.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.15)(styled-components@6.4.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(tsx@4.23.12)(typescript@5.9.2))(styled-components@6.4.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))
       astro:
         specifier: 5.13.5
-        version: 5.13.5(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(rollup@4.60.2)(tsx@4.23.12)(typescript@5.9.2)(yaml@2.9.0)
+        version: 5.13.5(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(rollup@4.60.2)(tsx@4.23.12)(typescript@5.9.2)(yaml@2.8.3)
       react:
         specifier: 19.3.1
         version: 19.3.1
@@ -60,6 +60,9 @@ importers:
       globals:
         specifier: 16.4.0
         version: 16.4.0
+      mdast-util-from-markdown:
+        specifier: 2.0.3
+        version: 2.0.3
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -74,7 +77,10 @@ importers:
         version: 8.42.0(eslint@9.35.0(jiti@2.7.0))(typescript@5.9.2)
       vite:
         specifier: 6.4.2
-        version: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0)
+        version: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3)
+      yaml:
+        specifier: 2.8.3
+        version: 2.8.3
 
 packages:
 
@@ -6634,7 +6640,7 @@ snapshots:
 
   '@astrojs/yaml2ts@0.2.3':
     dependencies:
-      yaml: 2.8.3
+      yaml: 2.9.0
 
   '@aws-lite/client@0.21.10':
     dependencies:
@@ -8564,14 +8570,14 @@ snapshots:
   '@rolldown/binding-win32-x64-msvc@1.2.15':
     optional: true
 
-  '@rolldown/plugin-babel@0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0))':
+  '@rolldown/plugin-babel@0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3))':
     dependencies:
       '@babel/core': 7.29.7
       picomatch: 4.0.7
       rolldown: 1.2.15
     optionalDependencies:
       '@babel/runtime': 7.29.7
-      vite: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0)
+      vite: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3)
 
   '@rolldown/pluginutils@1.0.1': {}
 
@@ -8696,7 +8702,7 @@ snapshots:
       jiti: 2.7.0
       vite: 8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)
 
-  '@sanity/blueprints@0.29.0(8ca4066ee73a996b27f3a753d365729e)':
+  '@sanity/blueprints@0.29.0(37208a2fc22628f912d39d3a80a43685)':
     dependencies:
       parse-duration: 2.1.10
     optionalDependencies:
@@ -8707,7 +8713,7 @@ snapshots:
   '@sanity/cli-build@7.0.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(rolldown@1.2.15)(sanity@6.20.0(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@rolldown/plugin-babel@0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(@sanity/workflow-blueprint@0.36.0(@sanity/workflow-engine@0.36.0(@types/react@19.2.14)(typescript@5.9.2))(typescript@5.9.2))(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(prismjs@1.30.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.15)(styled-components@6.4.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(tsx@4.23.12)(typescript@5.9.2))(tsx@4.23.12)(typescript@5.9.2)(use-sync-external-store@1.7.0(react@19.3.1))(xstate@5.33.3)(yaml@2.9.0)':
     dependencies:
       '@oclif/core': 4.14.0
-      '@rolldown/plugin-babel': 0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0))
+      '@rolldown/plugin-babel': 0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3))
       '@sanity/cli-core': 3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.9.0)
       '@sanity/generate-help-url': 4.0.0
       '@sanity/schema': 6.20.0(@types/react@19.2.14)
@@ -8761,6 +8767,43 @@ snapshots:
       - xstate
       - yaml
 
+  '@sanity/cli-core@3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.8.3)':
+    dependencies:
+      '@inquirer/core': 12.0.6(@types/node@24.1.0)
+      '@inquirer/prompts': 8.7.5(@types/node@24.1.0)
+      '@oclif/core': 4.14.0
+      '@sanity/client': 8.13.0
+      boxen: 8.0.1
+      empathic: 2.0.1
+      get-it: 9.6.2
+      get-tsconfig: 4.14.3
+      import-meta-resolve: 4.2.0
+      jiti: 2.7.0
+      jsdom: 29.1.1(@noble/hashes@2.3.0)
+      json-lexer: 1.2.0
+      log-symbols: 7.0.1
+      obug: 3.0.0
+      ora: 9.4.1
+      rxjs: 7.8.2
+      vite: 8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.8.3)
+      wrap-ansi: 9.0.2
+      zod: 4.6.7
+    transitivePeerDependencies:
+      - '@noble/hashes'
+      - '@types/node'
+      - '@vitejs/devtools'
+      - canvas
+      - esbuild
+      - less
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - terser
+      - tsx
+      - vitest
+      - yaml
+
   '@sanity/cli-core@3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.9.0)':
     dependencies:
       '@inquirer/core': 12.0.6(@types/node@24.1.0)
@@ -8805,7 +8848,7 @@ snapshots:
       '@oclif/plugin-not-found': 3.2.93(@types/node@24.1.0)
       '@sanity/blueprints': 0.28.0(jiti@2.7.0)(vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0))
       '@sanity/cli-build': 7.0.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(rolldown@1.2.15)(sanity@6.20.0(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@rolldown/plugin-babel@0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(@sanity/workflow-blueprint@0.36.0(@sanity/workflow-engine@0.36.0(@types/react@19.2.14)(typescript@5.9.2))(typescript@5.9.2))(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(prismjs@1.30.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.15)(styled-components@6.4.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(tsx@4.23.12)(typescript@5.9.2))(tsx@4.23.12)(typescript@5.9.2)(use-sync-external-store@1.7.0(react@19.3.1))(xstate@5.33.3)(yaml@2.9.0)
-      '@sanity/cli-core': 3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.9.0)
+      '@sanity/cli-core': 3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.8.3)
       '@sanity/client': 8.13.0
       '@sanity/codegen': 8.3.0(react@19.3.1)(typescript@5.9.2)
       '@sanity/descriptors': 1.3.0
@@ -9133,7 +9176,7 @@ snapshots:
       '@oclif/core': 4.14.0
       '@oclif/plugin-help': 6.3.0
       '@sanity-labs/oclif-plugin-skills-flag': 0.2.1(@oclif/core@4.14.0)
-      '@sanity/blueprints': 0.29.0(8ca4066ee73a996b27f3a753d365729e)
+      '@sanity/blueprints': 0.29.0(37208a2fc22628f912d39d3a80a43685)
       '@sanity/blueprints-parser': 0.5.0
       '@sanity/cli-build': 7.0.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(rolldown@1.2.15)(sanity@6.20.0(@babel/core@7.29.7)(@babel/runtime@7.29.7)(@noble/hashes@2.3.0)(@rolldown/plugin-babel@0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)))(@sanity/workflow-blueprint@0.36.0(@sanity/workflow-engine@0.36.0(@types/react@19.2.14)(typescript@5.9.2))(typescript@5.9.2))(@types/node@24.1.0)(@types/react@19.2.14)(esbuild@0.28.0)(immer@10.2.0)(jiti@2.7.0)(prismjs@1.30.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.15)(styled-components@6.4.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(tsx@4.23.12)(typescript@5.9.2))(tsx@4.23.12)(typescript@5.9.2)(use-sync-external-store@1.7.0(react@19.3.1))(xstate@5.33.3)(yaml@2.9.0)
       '@sanity/cli-core': 3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.9.0)
@@ -9456,7 +9499,7 @@ snapshots:
     dependencies:
       '@oclif/core': 4.14.0
       '@oclif/plugin-help': 6.2.58
-      '@sanity/cli-core': 3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.9.0)
+      '@sanity/cli-core': 3.14.0(@noble/hashes@2.3.0)(@types/node@24.1.0)(esbuild@0.28.0)(tsx@4.23.12)(yaml@2.8.3)
       '@sanity/client': 7.26.2
       '@sanity/telemetry': 1.1.0(react@19.3.1)
       '@sanity/workflow-blueprint': 0.36.0(@sanity/workflow-engine@0.36.0(@types/react@19.2.14)(typescript@5.9.2))(typescript@5.9.2)
@@ -9787,7 +9830,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0)
     optionalDependencies:
-      '@rolldown/plugin-babel': 0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0))
+      '@rolldown/plugin-babel': 0.2.4(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.15)(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3))
 
   '@volar/kit@2.4.28(typescript@5.9.2)':
     dependencies:
@@ -9945,7 +9988,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  astro@5.13.5(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(rollup@4.60.2)(tsx@4.23.12)(typescript@5.9.2)(yaml@2.9.0):
+  astro@5.13.5(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(rollup@4.60.2)(tsx@4.23.12)(typescript@5.9.2)(yaml@2.8.3):
     dependencies:
       '@astrojs/compiler': 2.13.1
       '@astrojs/internal-helpers': 0.7.2
@@ -10001,8 +10044,8 @@ snapshots:
       unist-util-visit: 5.1.0
       unstorage: 1.17.5
       vfile: 6.0.3
-      vite: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0)
-      vitefu: 1.1.3(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0))
+      vite: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3)
+      vitefu: 1.1.3(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3))
       xxhash-wasm: 1.1.0
       yargs-parser: 21.1.1
       yocto-spinner: 0.2.3
@@ -13433,7 +13476,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0):
+  vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.4)
@@ -13447,7 +13490,22 @@ snapshots:
       jiti: 2.7.0
       lightningcss: 1.33.0
       tsx: 4.23.12
-      yaml: 2.9.0
+      yaml: 2.8.3
+
+  vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.8.3):
+    dependencies:
+      lightningcss: 1.33.0
+      picomatch: 4.0.7
+      postcss: 8.5.32
+      rolldown: 1.2.15
+      tinyglobby: 0.2.17
+    optionalDependencies:
+      '@types/node': 24.1.0
+      esbuild: 0.28.0
+      fsevents: 2.3.3
+      jiti: 2.7.0
+      tsx: 4.23.12
+      yaml: 2.8.3
 
   vite@8.3.5(@types/node@24.1.0)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.0):
     dependencies:
@@ -13464,9 +13522,9 @@ snapshots:
       tsx: 4.23.12
       yaml: 2.9.0
 
-  vitefu@1.1.3(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0)):
+  vitefu@1.1.3(vite@6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3)):
     optionalDependencies:
-      vite: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.9.0)
+      vite: 6.4.2(@types/node@24.1.0)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.12)(yaml@2.8.3)
 
   volar-service-css@0.0.70(@volar/language-service@2.4.28):
     dependencies:
