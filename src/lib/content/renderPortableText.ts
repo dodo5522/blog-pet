@@ -94,23 +94,24 @@ export function getTableOfContents(
   return collectHeadings(blocks).items;
 }
 
-export function hasPortableTextContactLink(
+export function hasPortableTextTextContent(
   blocks: PortableTextBlock[],
 ): boolean {
-  const html = renderPortableText(blocks);
-  const anchors = html.matchAll(
-    /<a href="(?:https:\/\/|mailto:)[^"]*"[^>]*>([\s\S]*?)<\/a>/gi,
-  );
+  return blocks.some((block) => {
+    if (block._type === "block") return Boolean(toPlainText([block]).trim());
+    if (block._type === "image") {
+      return Boolean(block.asset?.url && block.alt?.trim());
+    }
+    if (block._type === "codeBlock") return Boolean(block.code?.trim());
+    if (block._type !== "table") return false;
 
-  for (const [, linkBody] of anchors) {
-    const visibleText = linkBody
-      .replace(/<[^>]*>/g, "")
-      .replace(/&nbsp;|&#160;/g, " ")
-      .trim();
-    if (visibleText) return true;
-  }
-
-  return false;
+    const table = block as PortableTextTable;
+    return (table.rows || []).some((row) =>
+      (row.cells || []).some((cell) =>
+        hasPortableTextTextContent(cell.value || []),
+      ),
+    );
+  });
 }
 
 function renderedHeadingId(

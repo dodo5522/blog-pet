@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   getTableOfContents,
-  hasPortableTextContactLink,
+  hasPortableTextTextContent,
   renderPortableText,
 } from "../src/lib/content/renderPortableText.ts";
 
@@ -140,105 +140,64 @@ test("escapes map titles and keeps iframe markup pasted as text", () => {
   assert.equal((html.match(/<iframe/g) || []).length, 1);
 });
 
-test("recognizes a safe external or email contact link in Portable Text", () => {
-  const block = {
-    _key: "contact",
+test("detects visible Portable Text content regardless of whether it has a link", () => {
+  const paragraph = {
+    _key: "body",
     _type: "block",
     style: "normal",
-    markDefs: [
-      { _key: "form", _type: "link", href: "https://forms.example/contact" },
-    ],
+    markDefs: [],
     children: [
       {
-        _key: "label",
+        _key: "text",
         _type: "span",
-        text: "問い合わせフォーム",
-        marks: ["form"],
+        text: "お問い合わせについて説明しています。",
+        marks: [],
       },
     ],
   };
 
-  assert.equal(hasPortableTextContactLink([block]), true);
+  assert.equal(hasPortableTextTextContent([paragraph]), true);
+  assert.equal(hasPortableTextTextContent([]), false);
   assert.equal(
-    hasPortableTextContactLink([
-      {
-        ...block,
-        markDefs: [
-          { _key: "form", _type: "link", href: "mailto:care@example.com" },
-        ],
-      },
-    ]),
-    true,
+    hasPortableTextTextContent([{ _key: "unknown", _type: "legacyBlock" }]),
+    false,
   );
   assert.equal(
-    hasPortableTextContactLink([
+    hasPortableTextTextContent([
       {
-        ...block,
-        markDefs: [
-          { _key: "form", _type: "link", href: "javascript:alert(1)" },
-        ],
+        _key: "image",
+        _type: "image",
+        asset: { url: "https://img.example/photo.jpg" },
       },
     ]),
     false,
   );
   assert.equal(
-    hasPortableTextContactLink([
+    hasPortableTextTextContent([
       {
-        ...block,
-        markDefs: [
-          { _key: "form", _type: "link", href: "http://forms.example/contact" },
-        ],
+        _key: "map",
+        _type: "googleMapsEmbed",
+        url: "https://www.google.com/maps/embed?pb=map-data",
       },
     ]),
     false,
   );
   assert.equal(
-    hasPortableTextContactLink([
+    hasPortableTextTextContent([
       {
-        ...block,
-        markDefs: [{ _key: "form", _type: "link", href: "/contact-form/" }],
+        ...paragraph,
+        children: [{ ...paragraph.children[0], text: "　\n  " }],
       },
     ]),
     false,
   );
   assert.equal(
-    hasPortableTextContactLink([
-      {
-        ...block,
-        children: [{ ...block.children[0], text: "  " }],
-      },
-    ]),
-    false,
-  );
-  assert.equal(
-    hasPortableTextContactLink([
-      {
-        ...block,
-        children: [{ ...block.children[0], text: " " }],
-      },
-    ]),
-    false,
-  );
-  assert.equal(
-    hasPortableTextContactLink([
-      {
-        ...block,
-        children: [{ ...block.children[0], marks: [] }],
-      },
-    ]),
-    false,
-  );
-  assert.equal(
-    hasPortableTextContactLink([
+    hasPortableTextTextContent([
       {
         _key: "table",
         _type: "table",
         headerRows: 0,
-        rows: [
-          {
-            cells: [{ value: [block] }],
-          },
-        ],
+        rows: [{ cells: [{ value: [paragraph] }] }],
       },
     ]),
     true,
