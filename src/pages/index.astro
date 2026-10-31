@@ -16,18 +16,35 @@ const recentPosts = posts.slice(0, 3);
 ---
 
 <BaseLayout siteSettings={siteSettings}>
-  <section class="hero">
-    <p class="eyebrow">ペットシッターのご案内</p>
-    <h1>{siteSettings.siteTagline}</h1>
-    <p>
-      {siteSettings.defaultSeoDescription} 大切な家族がいつもの場所で安心して過ごせるよう、日々の活動やサービスをご紹介します。
-    </p>
-    <div class="hero__actions">
-      <a class="button" href="/usage/"
-        >ご利用方法を見る <span aria-hidden="true">→</span></a
-      >
-      <a class="button button--ghost" href="/contact/">お問い合わせ</a>
+  <section class="hero hero--home">
+    <div class="hero__copy">
+      <p class="eyebrow">ペットシッターのご案内</p>
+      <h1>{siteSettings.siteTagline}</h1>
+      <p>
+        {siteSettings.defaultSeoDescription} 大切な家族がいつもの場所で安心して過ごせるよう、日々の活動やサービスをご紹介します。
+      </p>
+      <div class="hero__actions">
+        <a class="button" href="/usage/"
+          >ご利用方法を見る <span aria-hidden="true">→</span></a
+        >
+        <a class="button button--ghost" href="/contact/">お問い合わせ</a>
+      </div>
     </div>
+    <figure class="hero__visual">
+      <img
+        class="hero__image"
+        src="/images/cat-window-light.webp"
+        alt="日差しの入る部屋でくつろぐ猫のイメージ"
+        width="1600"
+        height="900"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <figcaption class="hero__caption">
+        <span aria-hidden="true">☀</span>いつものおうちで、いつもの安心を。
+      </figcaption>
+    </figure>
   </section>
 
   <section class="service-overview" aria-labelledby="service-overview-title">

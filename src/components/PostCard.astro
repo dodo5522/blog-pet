@@ -11,6 +11,17 @@ const readingTime = post.body ? getReadingTimeMinutes(post.body) : undefined;
 ---
 
 <article class="post-card">
+  {
+    post.coverImage?.asset?.url && (
+      <img
+        class="post-card__cover"
+        src={post.coverImage.asset.url}
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
   <div class="post-card__meta">
     <time datetime={post.publishedAt}
       >{new Date(post.publishedAt).toLocaleDateString("ja-JP")}</time
@@ -37,6 +48,6 @@ const readingTime = post.body ? getReadingTimeMinutes(post.body) : undefined;
     href={`/blog/${post.slug}/`}
     aria-label={`${post.title}を読む`}
   >
-    read entry <span aria-hidden="true">→</span>
+    記事を読む <span aria-hidden="true">→</span>
   </a>
 </article>
