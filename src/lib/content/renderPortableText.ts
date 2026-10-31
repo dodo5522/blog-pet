@@ -99,13 +99,10 @@ function collectHeadings(blocks: PortableTextBlock[]) {
   const idsByKey = new Map<string, string>();
   const headingBlocks = blocks.filter(
     (block) =>
-      (block.style === "h1" || block.style === "h2" || block.style === "h3") &&
-      headingText(block),
+      (block.style === "h2" || block.style === "h3") && headingText(block),
   );
 
-  // Reserve the IDs h2/h3 already used before legacy h1 blocks were included.
   for (const block of headingBlocks) {
-    if (block.style === "h1") continue;
     const text = headingText(block);
     const baseId = headingBaseId(text);
     const count = (counts.get(baseId) || 0) + 1;
@@ -115,24 +112,9 @@ function collectHeadings(blocks: PortableTextBlock[]) {
     if (block._key) idsByKey.set(block._key, id);
   }
 
-  const usedIds = new Set(ids.values());
-  for (const block of headingBlocks) {
-    if (block.style !== "h1") continue;
-    const baseId = headingBaseId(headingText(block));
-    let id = baseId;
-    let suffix = 2;
-    while (usedIds.has(id)) {
-      id = `${baseId}-${suffix}`;
-      suffix += 1;
-    }
-    usedIds.add(id);
-    ids.set(block, id);
-    if (block._key) idsByKey.set(block._key, id);
-  }
-
   const items = headingBlocks.map((block) => ({
     id: ids.get(block)!,
-    level: block.style === "h3" ? (3 as const) : (2 as const),
+    level: block.style === "h2" ? (2 as const) : (3 as const),
     text: headingText(block),
   }));
 
@@ -161,8 +143,6 @@ export function renderPortableText(blocks: PortableTextBlock[]): string {
   return toHTML(blocks, {
     components: {
       block: {
-        h1: ({ children, value }) =>
-          `<h2 id="${escapeHtml(renderedHeadingId(value, ids, idsByKey))}">${children}</h2>`,
         h2: ({ children, value }) =>
           `<h2 id="${escapeHtml(renderedHeadingId(value, ids, idsByKey))}">${children}</h2>`,
         h3: ({ children, value }) =>
