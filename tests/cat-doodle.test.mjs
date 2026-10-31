@@ -1,27 +1,24 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const componentPath = new URL(
-  "../src/components/CatDoodle.astro",
-  import.meta.url,
-);
 const homePage = readFileSync(
   new URL("../src/pages/index.astro", import.meta.url),
   "utf8",
 );
+const globalStyles = readFileSync(
+  new URL("../src/styles/global.css", import.meta.url),
+  "utf8",
+);
 
-test("猫の線画は読み上げ対象外の装飾として表示する", () => {
-  assert.ok(existsSync(componentPath), "CatDoodle コンポーネントを用意する");
-  const component = readFileSync(componentPath, "utf8");
-
+test("採用版ホームは猫の線画を表示しない", () => {
   assert.ok(
-    /<svg\b[^>]*aria-hidden="true"/s.test(component),
-    "線画 SVG を aria-hidden にする",
+    !/import CatDoodle from/.test(homePage),
+    "ホームから猫の線画を読み込まない",
   );
+  assert.ok(!/<CatDoodle\s*\/>/.test(homePage), "ホームで猫の線画を表示しない");
   assert.ok(
-    /import CatDoodle from "@\/components\/CatDoodle\.astro"/.test(homePage),
-    "ホームから CatDoodle を読み込む",
+    !/\.hero__visual \.cat-doodle/.test(globalStyles),
+    "線画用の重ね合わせスタイルを含めない",
   );
-  assert.ok(/<CatDoodle\s*\/>/.test(homePage), "ホームで線画を使う");
 });

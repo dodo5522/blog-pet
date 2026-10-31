@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import CatDoodle from "@/components/CatDoodle.astro";
 import PostCard from "@/components/PostCard.astro";
 import {
   getCategories,
@@ -42,7 +41,6 @@ const recentPosts = posts.slice(0, 3);
         fetchpriority="high"
         decoding="async"
       />
-      <CatDoodle />
       <figcaption class="hero__caption">
         <span aria-hidden="true">☀</span>いつものおうちで、いつもの安心を。
       </figcaption>
