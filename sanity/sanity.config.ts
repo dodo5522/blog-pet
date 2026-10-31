@@ -18,6 +18,20 @@ export default defineConfig({
   projectId,
   dataset,
   plugins: [structureTool(), visionTool()],
+  form: {
+    components: {
+      portableText: {
+        plugins: (props) =>
+          props.renderDefault({
+            ...props,
+            plugins: {
+              ...props.plugins,
+              table: { enabled: true },
+            },
+          }),
+      },
+    },
+  },
   schema: {
     types: schemaTypes,
   },

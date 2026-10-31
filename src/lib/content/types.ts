@@ -62,6 +62,19 @@ export interface PortableTextBlock {
   asset?: SanityImageAsset;
 }
 
+export interface PortableTextTableCell {
+  value?: PortableTextBlock[];
+}
+
+export interface PortableTextTableRow {
+  cells?: PortableTextTableCell[];
+}
+
+export interface PortableTextTable extends PortableTextBlock {
+  headerRows?: number;
+  rows?: PortableTextTableRow[];
+}
+
 export interface PostSummary {
   _id: string;
   title: string;

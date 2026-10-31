@@ -6,6 +6,7 @@ import { staffType } from "./documents/staffType";
 import { codeBlockType } from "./objects/codeBlockType";
 import { imageWithAltType } from "./objects/imageWithAltType";
 import { socialLinkType } from "./objects/socialLinkType";
+import { tableType } from "./objects/tableType";
 
 export const schemaTypes = [
   postType,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   codeBlockType,
   imageWithAltType,
   socialLinkType,
+  tableType,
 ];

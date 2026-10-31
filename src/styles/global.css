@@ -577,6 +577,14 @@ img {
   background: var(--ledger-surface);
   color: var(--ledger-muted);
 }
+.portable-text th > :first-child,
+.portable-text td > :first-child {
+  margin-top: 0;
+}
+.portable-text th > :last-child,
+.portable-text td > :last-child {
+  margin-bottom: 0;
+}
 .code-block {
   overflow: hidden;
   border: 1px solid var(--ledger-border);

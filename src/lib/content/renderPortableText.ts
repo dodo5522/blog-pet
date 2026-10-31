@@ -1,6 +1,10 @@
 import { toHTML } from "@portabletext/to-html";
 import { toPlainText } from "@portabletext/toolkit";
-import type { PortableTextBlock } from "@/lib/content/types";
+import type {
+  PortableTextBlock,
+  PortableTextTable,
+  PortableTextTableRow,
+} from "@/lib/content/types";
 
 export interface TableOfContentsItem {
   id: string;
@@ -36,45 +40,6 @@ function safeLinkHref(value: string): string {
   }
 
   return /^[a-z][a-z0-9+.-]*:/i.test(href) || href.includes("\\") ? "" : href;
-}
-
-function isMarkdownTableDivider(line: string): boolean {
-  return /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
-}
-
-function splitMarkdownTableRow(line: string): string[] {
-  return line
-    .trim()
-    .replace(/^\|/, "")
-    .replace(/\|$/, "")
-    .split("|")
-    .map((cell) => cell.trim());
-}
-
-function renderMarkdownTable(value: string): string {
-  const lines = value
-    .trim()
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-  if (lines.length < 3 || !isMarkdownTableDivider(lines[1])) return "";
-
-  const headers = splitMarkdownTableRow(lines[0]);
-  const rows = lines.slice(2).map(splitMarkdownTableRow);
-  if (!headers.length || rows.some((row) => row.length !== headers.length))
-    return "";
-
-  const head = headers
-    .map((header) => `<th scope="col">${escapeHtml(header)}</th>`)
-    .join("");
-  const body = rows
-    .map(
-      (row) =>
-        `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`,
-    )
-    .join("");
-
-  return `<div class="table-scroll"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
 }
 
 function headingText(block: PortableTextBlock): string {
@@ -137,6 +102,40 @@ function renderedHeadingId(
   return idByKey || ids.get(block) || headingBaseId(headingText(block));
 }
 
+function renderPortableTextTable(value: PortableTextTable): string {
+  const rows = (Array.isArray(value.rows) ? value.rows : []).filter(
+    (row): row is PortableTextTableRow =>
+      Boolean(row) && Array.isArray(row.cells) && row.cells.length > 0,
+  );
+  if (!rows.length) return "";
+
+  const headerRows = Number.isFinite(value.headerRows)
+    ? Math.min(rows.length, Math.max(0, Math.trunc(value.headerRows!)))
+    : 0;
+  const renderRow = (row: PortableTextTableRow, index: number) => {
+    const isHeader = index < headerRows;
+    const cellTag = isHeader ? 'th scope="col"' : "td";
+    const cells = (row.cells || [])
+      .map(
+        (cell) =>
+          `<${cellTag}>${renderPortableText(Array.isArray(cell?.value) ? cell.value : [])}</${isHeader ? "th" : "td"}>`,
+      )
+      .join("");
+    return `<tr>${cells}</tr>`;
+  };
+
+  const head = rows
+    .slice(0, headerRows)
+    .map((row, index) => renderRow(row, index))
+    .join("");
+  const body = rows
+    .slice(headerRows)
+    .map((row, index) => renderRow(row, index + headerRows))
+    .join("");
+
+  return `<div class="table-scroll"><table>${head ? `<thead>${head}</thead>` : ""}${body ? `<tbody>${body}</tbody>` : ""}</table></div>`;
+}
+
 export function renderPortableText(blocks: PortableTextBlock[]): string {
   const { ids, idsByKey } = collectHeadings(blocks);
 
@@ -149,12 +148,9 @@ export function renderPortableText(blocks: PortableTextBlock[]): string {
           `<h3 id="${escapeHtml(renderedHeadingId(value, ids, idsByKey))}">${children}</h3>`,
       },
       types: {
+        table: ({ value }: { value: PortableTextTable }) =>
+          renderPortableTextTable(value),
         codeBlock: ({ value }: { value: PortableTextBlock }) => {
-          if (value.language === "markdown") {
-            const table = renderMarkdownTable(value.code || "");
-            if (table) return table;
-          }
-
           const filename = value.filename
             ? `<span class="code-block__filename">${escapeHtml(value.filename)}</span>`
             : "";

@@ -90,6 +90,7 @@ export const servicePageType = defineType({
             }),
           ],
         }),
+        defineArrayMember({ type: "table" }),
       ],
       validation: (rule) =>
         rule.required().custom((blocks) =>

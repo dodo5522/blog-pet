@@ -133,5 +133,5 @@ CloudFront
 - Astro 側は `src/lib/content/api.ts` から Sanity を取得する
 - Sanity 未設定時でもローカル確認できるよう、最小のフォールバックコンテンツを持つ
 - 本番 deploy では `SANITY_FALLBACK_MODE=never` とし、Sanity fetch 失敗時に fallback content を公開しない
-- Portable Text は HTML に変換して表示し、コードブロックは専用スタイルを当てる
+- Portable Text は HTML に変換して表示する。コードブロックには専用スタイルを当て、表は意味のある HTML として描画し、狭い画面では表内を横スクロールする
 - Sanity Studio は `sanity/` 配下で管理し、同一リポジトリで運用する
