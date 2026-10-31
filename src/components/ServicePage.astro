@@ -4,6 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getServicePage, getSiteSettings } from "@/lib/content/api";
 import type { ServicePageKind } from "@/lib/content/types";
 import { firstNonBlank, selectSeoImage } from "@/lib/seo";
+import { hasPortableTextTextContent } from "@/lib/content/renderPortableText";
 
 interface Props {
   kind: ServicePageKind;
@@ -22,6 +23,7 @@ const description =
   firstNonBlank(page?.seoDescription, defaultDescription) || defaultDescription;
 const seoTitle =
   firstNonBlank(page?.seoTitle) || `${title} | ${siteSettings.siteTitle}`;
+const hasContactBodyText = hasPortableTextTextContent(page?.body || []);
 ---
 
 <BaseLayout
@@ -58,11 +60,11 @@ const seoTitle =
             {siteSettings.contactLabel || "お問い合わせ先を開く"}
             <span aria-hidden="true">→</span>
           </a>
-        ) : (
+        ) : !hasContactBodyText ? (
           <p class="service-page__notice">
             お問い合わせ先は準備中です。掲載内容は運営者による設定後に表示されます。
           </p>
-        ))
+        ) : null)
     }
     {
       kind !== "contact" && (

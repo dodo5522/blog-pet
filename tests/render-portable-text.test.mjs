@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   getTableOfContents,
+  hasPortableTextTextContent,
   renderPortableText,
 } from "../src/lib/content/renderPortableText.ts";
 
@@ -137,4 +138,68 @@ test("escapes map titles and keeps iframe markup pasted as text", () => {
     /&lt;iframe src=&quot;https:\/\/attacker\.example&quot;&gt;&lt;\/iframe&gt;/,
   );
   assert.equal((html.match(/<iframe/g) || []).length, 1);
+});
+
+test("detects visible Portable Text content regardless of whether it has a link", () => {
+  const paragraph = {
+    _key: "body",
+    _type: "block",
+    style: "normal",
+    markDefs: [],
+    children: [
+      {
+        _key: "text",
+        _type: "span",
+        text: "お問い合わせについて説明しています。",
+        marks: [],
+      },
+    ],
+  };
+
+  assert.equal(hasPortableTextTextContent([paragraph]), true);
+  assert.equal(hasPortableTextTextContent([]), false);
+  assert.equal(
+    hasPortableTextTextContent([{ _key: "unknown", _type: "legacyBlock" }]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextTextContent([
+      {
+        _key: "image",
+        _type: "image",
+        asset: { url: "https://img.example/photo.jpg" },
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextTextContent([
+      {
+        _key: "map",
+        _type: "googleMapsEmbed",
+        url: "https://www.google.com/maps/embed?pb=map-data",
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextTextContent([
+      {
+        ...paragraph,
+        children: [{ ...paragraph.children[0], text: "　\n  " }],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextTextContent([
+      {
+        _key: "table",
+        _type: "table",
+        headerRows: 0,
+        rows: [{ cells: [{ value: [paragraph] }] }],
+      },
+    ]),
+    true,
+  );
 });

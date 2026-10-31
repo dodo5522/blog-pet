@@ -94,6 +94,26 @@ export function getTableOfContents(
   return collectHeadings(blocks).items;
 }
 
+export function hasPortableTextTextContent(
+  blocks: PortableTextBlock[],
+): boolean {
+  return blocks.some((block) => {
+    if (block._type === "block") return Boolean(toPlainText([block]).trim());
+    if (block._type === "image") {
+      return Boolean(block.asset?.url && block.alt?.trim());
+    }
+    if (block._type === "codeBlock") return Boolean(block.code?.trim());
+    if (block._type !== "table") return false;
+
+    const table = block as PortableTextTable;
+    return (table.rows || []).some((row) =>
+      (row.cells || []).some((cell) =>
+        hasPortableTextTextContent(cell.value || []),
+      ),
+    );
+  });
+}
+
 function renderedHeadingId(
   value: unknown,
   ids: Map<PortableTextBlock, string>,
