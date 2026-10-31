@@ -10,7 +10,7 @@ Sanity Studio で活動報告とサービス案内を管理し、公開済み文
 - `updatedAt`、`coverImage`、`seoTitle`、`seoDescription`、`ogImage` は任意。
 - `categories` は `category` 参照の配列です。
 - `author` は `staff` を参照します。
-- 本文画像とカバー / OGP 画像には代替テキストを設定します。本文画像は画像アセットを選択していないと公開できません。コードブロックも利用できます。
+- 本文画像とカバー / OGP 画像には代替テキストを設定します。本文画像は画像アセットを選択していないと公開できません。コードブロックと表も利用できます。
 - 本文では標準段落、見出し2（`h2`）、見出し3（`h3`）を選択できます。ページタイトルを唯一の `h1` とします。
 - 公開取得では `publishedAt` と slug がある文書に限定し、draft ID を除外します。
 
@@ -24,7 +24,7 @@ Sanity Studio で活動報告とサービス案内を管理し、公開済み文
 
 ### Service page
 
-固定のサービス案内文書です。`kind` と `title`、Portable Text の `body` が必須です。`kind` は `usage`（ご利用方法）、`price`（料金）、`access`（アクセス・対応エリア）、`contact`（お問い合わせ）のいずれか一つとし、同じ種別の別文書は Studio の検証で警告します。本文では標準段落、見出し2（`h2`）、見出し3（`h3`）を選択できます。ページタイトルを唯一の `h1` とします。本文画像を追加した場合は画像アセットの選択が必須です。画像と SEO フィールドは任意です。
+固定のサービス案内文書です。`kind` と `title`、Portable Text の `body` が必須です。`kind` は `usage`（ご利用方法）、`price`（料金）、`access`（アクセス・対応エリア）、`contact`（お問い合わせ）のいずれか一つとし、同じ種別の別文書は Studio の検証で警告します。本文では標準段落、見出し2（`h2`）、見出し3（`h3`）を選択でき、表と画像を挿入できます。ページタイトルを唯一の `h1` とします。本文画像を追加した場合は画像アセットの選択が必須です。画像と SEO フィールドは任意です。
 
 `seoTitle` は検索・SNSに表示する完成したタイトルです。入力した場合、サイト名は自動追加しません。未入力ならページタイトルとサイト名を組み合わせます。`seoDescription` がなければ各ページの既定説明文を使います。OGP画像は `ogImage`、`heroImage`、サイト既定画像の順で選びます。
 
@@ -50,5 +50,7 @@ Sanity project/dataset は空の状態から開始します。Sanity Studio を�
 - `post`、`category`、`staff`、`servicePage`、`siteSettings` の取得は公開文書のみを対象にします。draft は公開ビルドへ含めません。
 - 公開 URL は `/categories/` と `/categories/[slug]/` です。Sanity の Tag 文書やタグデータは使用しません。
 - `codeBlock` は `filename`、`language`、`code` を持ちます。
+- `table` は Sanity Portable Text の表編集機能で利用する `headerRows` と行・セルを持ちます。セル内容も Portable Text で管理します。
+- Markdown 表を書いた `codeBlock` は表に変換せず、通常のコードとして表示します。
 - `imageWithAlt` は画像と必須 `alt` を持ちます。
 - `socialLink` は表示名 `label` と URL を持ちます。

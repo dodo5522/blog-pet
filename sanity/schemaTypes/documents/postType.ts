@@ -52,6 +52,7 @@ export const postType = defineType({
           ],
         }),
         defineArrayMember({ type: "codeBlock" }),
+        defineArrayMember({ type: "table" }),
       ],
       validation: (rule) =>
         rule.required().custom((blocks) =>

@@ -1,5 +1,13 @@
 # DECISIONS.md
 
+## 2026-10-31: Sanity Portable Text の組み込み表編集機能を使う
+
+- Post と Service page の本文に表を追加できるよう、Sanity Studio の Portable Text 組み込み表編集機能を有効にする。
+- インストール済み Sanity は 6.20 で、Portable Text の表編集機能を含むため、専用プラグインや独自 Studio UI は追加しない。
+- 表データは標準の `table` / `row` / `cell` / `headerRows` 形状で保持し、公開側で `thead` / `tbody` / `th` / `td` に静的変換する。
+- 既存の Markdown `codeBlock` 表変換は削除し、コードブロックをコードとして表示する。
+- 根拠: [Sanity Portable Text Editor の表編集設定](https://www.sanity.io/docs/studio/portable-text-editor-configuration)、[Sanity Studio v6.6.0 changelog](https://www.sanity.io/docs/changelog/studio-Ni41LjA)。
+
 ## 2026-10-13: blog-tech を blog-pet の基盤として採用する
 
 Astro、Sanity、GitHub Actions、S3、CloudFront による静的サイト構成を引き継ぐ。公開サイトの表示時にコンテンツ API や独自バックエンドへ依存しないため、運用コストと保守負担を抑えられる。
