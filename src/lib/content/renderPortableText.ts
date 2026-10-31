@@ -94,6 +94,25 @@ export function getTableOfContents(
   return collectHeadings(blocks).items;
 }
 
+export function hasPortableTextContactLink(
+  blocks: PortableTextBlock[],
+): boolean {
+  const html = renderPortableText(blocks);
+  const anchors = html.matchAll(
+    /<a href="(?:https:\/\/|mailto:)[^"]*"[^>]*>([\s\S]*?)<\/a>/gi,
+  );
+
+  for (const [, linkBody] of anchors) {
+    const visibleText = linkBody
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;|&#160;/g, " ")
+      .trim();
+    if (visibleText) return true;
+  }
+
+  return false;
+}
+
 function renderedHeadingId(
   value: unknown,
   ids: Map<PortableTextBlock, string>,

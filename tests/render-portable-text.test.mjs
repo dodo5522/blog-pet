@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   getTableOfContents,
+  hasPortableTextContactLink,
   renderPortableText,
 } from "../src/lib/content/renderPortableText.ts";
 
@@ -137,4 +138,109 @@ test("escapes map titles and keeps iframe markup pasted as text", () => {
     /&lt;iframe src=&quot;https:\/\/attacker\.example&quot;&gt;&lt;\/iframe&gt;/,
   );
   assert.equal((html.match(/<iframe/g) || []).length, 1);
+});
+
+test("recognizes a safe external or email contact link in Portable Text", () => {
+  const block = {
+    _key: "contact",
+    _type: "block",
+    style: "normal",
+    markDefs: [
+      { _key: "form", _type: "link", href: "https://forms.example/contact" },
+    ],
+    children: [
+      {
+        _key: "label",
+        _type: "span",
+        text: "問い合わせフォーム",
+        marks: ["form"],
+      },
+    ],
+  };
+
+  assert.equal(hasPortableTextContactLink([block]), true);
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        markDefs: [
+          { _key: "form", _type: "link", href: "mailto:care@example.com" },
+        ],
+      },
+    ]),
+    true,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        markDefs: [
+          { _key: "form", _type: "link", href: "javascript:alert(1)" },
+        ],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        markDefs: [
+          { _key: "form", _type: "link", href: "http://forms.example/contact" },
+        ],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        markDefs: [{ _key: "form", _type: "link", href: "/contact-form/" }],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        children: [{ ...block.children[0], text: "  " }],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        children: [{ ...block.children[0], text: " " }],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        ...block,
+        children: [{ ...block.children[0], marks: [] }],
+      },
+    ]),
+    false,
+  );
+  assert.equal(
+    hasPortableTextContactLink([
+      {
+        _key: "table",
+        _type: "table",
+        headerRows: 0,
+        rows: [
+          {
+            cells: [{ value: [block] }],
+          },
+        ],
+      },
+    ]),
+    true,
+  );
 });
