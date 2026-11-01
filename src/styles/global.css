@@ -831,8 +831,9 @@ img {
 }
 .service-link {
   display: grid;
-  gap: 1.3rem;
-  min-height: 150px;
+  align-content: center;
+  gap: 0.5rem;
+  min-height: 110px;
   padding: 1.25rem;
   border: 1px solid var(--ledger-border);
   border-radius: 1.1rem;
@@ -843,10 +844,6 @@ img {
 .service-link:hover,
 .category-card:hover {
   transform: translateY(-3px);
-}
-.service-link > span:first-child {
-  color: #9a6b19;
-  font: 700 0.82rem/1 var(--font-body);
 }
 .service-link strong {
   align-self: end;
