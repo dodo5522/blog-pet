@@ -41,9 +41,9 @@ test("記事カードは cover image があるときだけ画像を出す", () =
   assert.ok(/loading="lazy"/.test(postCard));
 });
 
-test("ヘッダーとフッターのリンクは44pxの操作領域を持つ", () => {
+test("ヘッダーのリンクは44pxの操作領域を持つ", () => {
   const navigationLinkRule = globalStyles.match(
-    /\.site-header__nav a,\s*\.site-footer__links a\s*\{([^}]+)\}/,
+    /\.site-header__nav a\s*\{([^}]+)\}/,
   )?.[1];
 
   assert.ok(navigationLinkRule, "共通ナビゲーションリンクのスタイルを定義する");

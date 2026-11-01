@@ -95,16 +95,14 @@ img {
 .site-header__brand-mark {
   font-size: 1.25rem;
 }
-.site-header__nav,
-.site-footer__links {
+.site-header__nav {
   display: flex;
   gap: clamp(1rem, 3vw, 2rem);
   padding: 0;
   margin: 0;
   list-style: none;
 }
-.site-header__nav a,
-.site-footer__links a {
+.site-header__nav a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -115,8 +113,7 @@ img {
 .site-header__nav a::before {
   content: none;
 }
-.site-header__nav a:hover,
-.site-footer__links a:hover {
+.site-header__nav a:hover {
   color: var(--ledger-text);
 }
 .site-footer p {
@@ -807,10 +804,6 @@ img {
   color: var(--ledger-text);
   font-weight: 700;
   text-decoration: none;
-}
-.site-footer__links {
-  flex-wrap: wrap;
-  gap: 0.8rem 1.3rem;
 }
 .site-footer__meta {
   display: flex;
