@@ -30,7 +30,6 @@ if (introductionParagraphs.length > 0) {
 <BaseLayout siteSettings={siteSettings}>
   <section class="hero hero--home">
     <div class="hero__copy">
-      <p class="eyebrow">ペットシッターのご案内</p>
       <h1>{siteSettings.siteTagline}</h1>
       <div class="hero__introduction">
         {introductionParagraphs.map((paragraph) => <p>{paragraph}</p>)}
@@ -53,9 +52,6 @@ if (introductionParagraphs.length > 0) {
         fetchpriority="high"
         decoding="async"
       />
-      <figcaption class="hero__caption">
-        <span aria-hidden="true">☀</span>いつものおうちで、いつもの安心を。
-      </figcaption>
     </figure>
   </section>
 
