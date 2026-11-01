@@ -8,12 +8,11 @@ import { hasPortableTextTextContent } from "@/lib/content/renderPortableText";
 
 interface Props {
   kind: ServicePageKind;
-  eyebrow: string;
   defaultTitle: string;
   defaultDescription: string;
 }
 
-const { kind, eyebrow, defaultTitle, defaultDescription } = Astro.props;
+const { kind, defaultTitle, defaultDescription } = Astro.props;
 const [siteSettings, page] = await Promise.all([
   getSiteSettings(),
   getServicePage(kind),
@@ -34,7 +33,6 @@ const hasContactBodyText = hasPortableTextTextContent(page?.body || []);
   imageUrl={selectSeoImage(page?.ogImage, page?.heroImage)}
 >
   <section class="page-header">
-    <p class="eyebrow">{eyebrow}</p>
     <h1>{title}</h1>
     <p>{description}</p>
   </section>

@@ -33,7 +33,6 @@ if (!category) return Astro.redirect("/404.html");
   canonicalPath={`/categories/${category.slug}/`}
 >
   <section class="page-header">
-    <p class="eyebrow">Category</p>
     <h1>{category.name}</h1>
     <p>{category.description || `${category.name} に関連する公開記事です。`}</p>
   </section>
