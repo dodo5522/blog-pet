@@ -1,17 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
-import {
-  getCategories,
-  getPublishedPosts,
-  getSiteSettings,
-} from "@/lib/content/api";
+import { getPublishedPosts, getSiteSettings } from "@/lib/content/api";
 import { splitTextParagraphs } from "@/lib/content/textParagraphs";
 
-const [siteSettings, posts, categories] = await Promise.all([
+const [siteSettings, posts] = await Promise.all([
   getSiteSettings(),
   getPublishedPosts(),
-  getCategories(),
 ]);
 const recentPosts = posts.slice(0, 3);
 const introductionParagraphs = splitTextParagraphs(
@@ -30,7 +25,6 @@ if (introductionParagraphs.length > 0) {
 <BaseLayout siteSettings={siteSettings}>
   <section class="hero hero--home">
     <div class="hero__copy">
-      <p class="eyebrow">ペットシッターのご案内</p>
       <h1>{siteSettings.siteTagline}</h1>
       <div class="hero__introduction">
         {introductionParagraphs.map((paragraph) => <p>{paragraph}</p>)}
@@ -53,9 +47,6 @@ if (introductionParagraphs.length > 0) {
         fetchpriority="high"
         decoding="async"
       />
-      <figcaption class="hero__caption">
-        <span aria-hidden="true">☀</span>いつものおうちで、いつもの安心を。
-      </figcaption>
     </figure>
   </section>
 
@@ -67,23 +58,16 @@ if (introductionParagraphs.length > 0) {
     </div>
     <div class="service-links">
       <a class="service-link" href="/usage/"
-        ><span>01</span><strong>ご利用方法</strong><span aria-hidden="true"
-          >→</span
-        ></a
+        ><strong>ご利用方法</strong><span aria-hidden="true">→</span></a
       >
       <a class="service-link" href="/price/"
-        ><span>02</span><strong>料金</strong><span aria-hidden="true">→</span
-        ></a
+        ><strong>料金</strong><span aria-hidden="true">→</span></a
       >
       <a class="service-link" href="/staff/"
-        ><span>03</span><strong>スタッフ</strong><span aria-hidden="true"
-          >→</span
-        ></a
+        ><strong>スタッフ</strong><span aria-hidden="true">→</span></a
       >
       <a class="service-link" href="/access/"
-        ><span>04</span><strong>対応エリア</strong><span aria-hidden="true"
-          >→</span
-        ></a
+        ><strong>対応エリア</strong><span aria-hidden="true">→</span></a
       >
     </div>
   </section>
@@ -107,35 +91,6 @@ if (introductionParagraphs.length > 0) {
       )
     }
   </section>
-
-  {
-    categories.length > 0 && (
-      <section
-        class="category-overview"
-        aria-labelledby="category-overview-title"
-      >
-        <div class="section-heading">
-          <div>
-            <h2 id="category-overview-title">カテゴリー</h2>
-          </div>
-          <a href="/categories/">
-            一覧を見る <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div class="category-cards">
-          {categories.map((category) => (
-            <a class="category-card" href={`/categories/${category.slug}/`}>
-              <strong>{category.name}</strong>
-              {category.description && <span>{category.description}</span>}
-              <span class="category-card__arrow" aria-hidden="true">
-                →
-              </span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )
-  }
 
   <section class="contact-banner" aria-labelledby="contact-banner-title">
     <div>
