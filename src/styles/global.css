@@ -341,11 +341,6 @@ img {
     box-shadow 0.16s ease,
     transform 0.16s ease;
 }
-.post-card:hover {
-  border-color: var(--ledger-copper);
-  box-shadow: 0 0.7rem 1.8rem rgb(61 66 54 / 9%);
-  transform: translateY(-2px);
-}
 .post-card__cover {
   width: calc(100% + 2rem);
   max-width: none;
@@ -366,7 +361,11 @@ img {
   font: 700 clamp(1.15rem, 2vw, 1.4rem) / 1.5 var(--font-body);
 }
 .post-card h2 a {
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 .post-card > p {
   max-width: 68ch;
@@ -374,14 +373,6 @@ img {
   color: var(--ledger-muted);
   font-size: 0.96rem;
   line-height: 1.8;
-}
-.post-card__read {
-  align-self: flex-start;
-  margin-top: auto;
-  padding-top: 0.35rem;
-  color: var(--ledger-copper);
-  font: 700 0.88rem/1.4 var(--font-body);
-  text-decoration: none;
 }
 
 .page-header {

@@ -1,13 +1,11 @@
 ---
 import TagPill from "@/components/TagPill.astro";
-import { getReadingTimeMinutes } from "@/lib/content/renderPortableText";
 import type { PostSummary } from "@/lib/content/types";
 
 interface Props {
   post: PostSummary;
 }
 const { post } = Astro.props;
-const readingTime = post.body ? getReadingTimeMinutes(post.body) : undefined;
 ---
 
 <article class="post-card">
@@ -22,13 +20,13 @@ const readingTime = post.body ? getReadingTimeMinutes(post.body) : undefined;
       />
     )
   }
+  <h2><a href={`/blog/${post.slug}/`}>{post.title}</a></h2>
   <div class="post-card__meta">
     <time datetime={post.publishedAt}
       >{new Date(post.publishedAt).toLocaleDateString("ja-JP")}</time
     >
-    {readingTime && <span>{readingTime} min read</span>}
-    {post.author?.name && <span>by {post.author.name}</span>}
   </div>
+  <p>{post.excerpt}</p>
   {
     post.categories.length > 0 && (
       <div class="post-card__tags" aria-label="カテゴリー">
@@ -41,13 +39,4 @@ const readingTime = post.body ? getReadingTimeMinutes(post.body) : undefined;
       </div>
     )
   }
-  <h2><a href={`/blog/${post.slug}/`}>{post.title}</a></h2>
-  <p>{post.excerpt}</p>
-  <a
-    class="post-card__read"
-    href={`/blog/${post.slug}/`}
-    aria-label={`${post.title}を読む`}
-  >
-    記事を読む <span aria-hidden="true">→</span>
-  </a>
 </article>

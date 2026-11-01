@@ -62,10 +62,8 @@ if (introductionParagraphs.length > 0) {
   <section class="service-overview" aria-labelledby="service-overview-title">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Service guide</p>
         <h2 id="service-overview-title">サービスのご案内</h2>
       </div>
-      <a href="/usage/">ご利用方法 <span aria-hidden="true">→</span></a>
     </div>
     <div class="service-links">
       <a class="service-link" href="/usage/"
@@ -90,42 +88,10 @@ if (introductionParagraphs.length > 0) {
     </div>
   </section>
 
-  {
-    categories.length > 0 && (
-      <section
-        class="category-overview"
-        aria-labelledby="category-overview-title"
-      >
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Activity reports</p>
-            <h2 id="category-overview-title">カテゴリー</h2>
-          </div>
-          <a href="/categories/">
-            一覧を見る <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div class="category-cards">
-          {categories.map((category) => (
-            <a class="category-card" href={`/categories/${category.slug}/`}>
-              <strong>{category.name}</strong>
-              <span>{category.description || "記事を読む"}</span>
-              <span class="category-card__arrow" aria-hidden="true">
-                →
-              </span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )
-  }
-
   <section class="entries-section" aria-labelledby="recent-entries">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Activity reports</p><h2 id="recent-entries">
-          活動報告
-        </h2>
+        <h2 id="recent-entries">活動報告</h2>
       </div>
       <a href="/blog/">すべて見る <span aria-hidden="true">→</span></a>
     </div>
@@ -142,9 +108,37 @@ if (introductionParagraphs.length > 0) {
     }
   </section>
 
+  {
+    categories.length > 0 && (
+      <section
+        class="category-overview"
+        aria-labelledby="category-overview-title"
+      >
+        <div class="section-heading">
+          <div>
+            <h2 id="category-overview-title">カテゴリー</h2>
+          </div>
+          <a href="/categories/">
+            一覧を見る <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="category-cards">
+          {categories.map((category) => (
+            <a class="category-card" href={`/categories/${category.slug}/`}>
+              <strong>{category.name}</strong>
+              {category.description && <span>{category.description}</span>}
+              <span class="category-card__arrow" aria-hidden="true">
+                →
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
   <section class="contact-banner" aria-labelledby="contact-banner-title">
     <div>
-      <p class="eyebrow">Feel free to contact us</p>
       <h2 id="contact-banner-title">ご相談・お問い合わせ</h2>
       <p>
         サービスについて気になることがありましたら、お気軽にご相談ください。
