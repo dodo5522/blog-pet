@@ -820,7 +820,6 @@ img {
   font-size: 0.78rem;
 }
 .service-overview,
-.category-overview,
 .contact-banner {
   margin-top: clamp(4rem, 8vw, 6.5rem);
 }
@@ -841,8 +840,7 @@ img {
   text-decoration: none;
   transition: transform 0.16s ease;
 }
-.service-link:hover,
-.category-card:hover {
+.service-link:hover {
   transform: translateY(-3px);
 }
 .service-link strong {
@@ -851,33 +849,6 @@ img {
 }
 .service-link > span:last-child {
   justify-self: end;
-  color: var(--ledger-copper);
-}
-.category-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.9rem;
-}
-.category-card {
-  position: relative;
-  display: grid;
-  gap: 0.5rem;
-  min-height: 135px;
-  padding: 1.25rem 3rem 1.25rem 1.25rem;
-  border: 1px solid var(--ledger-border);
-  border-radius: 1.1rem;
-  background: var(--ledger-surface);
-  text-decoration: none;
-  transition: transform 0.16s ease;
-}
-.category-card > span:not(.category-card__arrow) {
-  color: var(--ledger-muted);
-  font-size: 0.9rem;
-}
-.category-card__arrow {
-  position: absolute;
-  right: 1.25rem;
-  bottom: 1.25rem;
   color: var(--ledger-copper);
 }
 .contact-banner {
