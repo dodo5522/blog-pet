@@ -18,6 +18,7 @@ import {
   type SanitySiteSettings,
 } from "@/lib/content/siteSettings";
 import { postMatchesCategorySlug } from "@/lib/content/categories";
+import { sortStaff } from "@/lib/content/staffOrder";
 import {
   seoFixtureCategories,
   seoFixturePosts,
@@ -172,7 +173,7 @@ export async function getPostsByCategorySlug(
 
 export async function getStaff(): Promise<Staff[]> {
   const result = await fetchSanity<Staff[]>(STAFF_QUERY);
-  return result.ok ? result.data : fallbackStaff;
+  return sortStaff(result.ok ? result.data : fallbackStaff);
 }
 
 export async function getServicePage(
