@@ -22,6 +22,7 @@ export interface Category {
 export interface Staff {
   _id: string;
   name: string;
+  displayOrder?: number;
   slug?: string;
   role?: string;
   bio?: string;

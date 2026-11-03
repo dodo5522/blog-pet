@@ -53,8 +53,8 @@ export const CATEGORIES_QUERY = `
 `;
 
 export const STAFF_QUERY = `
-*[_type == "staff" && !(_id in path("drafts.**"))] | order(name asc){
-  _id, name, "slug": slug.current, role, bio,
+*[_type == "staff" && !(_id in path("drafts.**"))]{
+  _id, name, displayOrder, "slug": slug.current, role, bio,
   avatar{alt, asset->{url}},
   links[]{label, url}
 }

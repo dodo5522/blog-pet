@@ -25,6 +25,14 @@ export const staffType = defineType({
       type: "string",
     }),
     defineField({
+      name: "displayOrder",
+      title: "表示順",
+      type: "number",
+      description:
+        "小さい数字から表示します。未設定のスタッフは設定済みのスタッフの後に表示します。",
+      validation: (rule) => rule.integer().min(0),
+    }),
+    defineField({
       name: "bio",
       title: "紹介文",
       type: "text",
