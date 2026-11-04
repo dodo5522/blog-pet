@@ -17,12 +17,12 @@ const globalStyles = readFileSync(
 
 test("ホームの猫写真はローカル画像と説明的な代替テキストを使う", () => {
   assert.ok(
-    /src="\/images\/cat-window-light\.webp"/.test(homePage),
-    "ホーム画像は /images/cat-window-light.webp を参照する",
+    /src=\{homeImage\.src\}/.test(homePage),
+    "ホーム画像は選択された画像を参照する",
   );
   assert.ok(
-    /alt="日差しの入る部屋でくつろぐ猫のイメージ"/.test(homePage),
-    "猫の写真に内容を説明する alt を付ける",
+    /alt=\{homeImage\.alt\}/.test(homePage),
+    "選択された画像の代替テキストを使う",
   );
   assert.ok(
     existsSync(

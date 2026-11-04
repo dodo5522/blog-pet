@@ -3,12 +3,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import PostCard from "@/components/PostCard.astro";
 import { getPublishedPosts, getSiteSettings } from "@/lib/content/api";
 import { splitTextParagraphs } from "@/lib/content/textParagraphs";
+import { selectHomeImage } from "@/lib/content/homeImage";
 
 const [siteSettings, posts] = await Promise.all([
   getSiteSettings(),
   getPublishedPosts(),
 ]);
 const recentPosts = posts.slice(0, 3);
+const homeImage = selectHomeImage(siteSettings.homeImage);
 const introductionParagraphs = splitTextParagraphs(
   siteSettings.defaultSeoDescription,
 );
@@ -33,10 +35,8 @@ if (introductionParagraphs.length > 0) {
     <figure class="hero__visual">
       <img
         class="hero__image"
-        src="/images/cat-window-light.webp"
-        alt="日差しの入る部屋でくつろぐ猫のイメージ"
-        width="1600"
-        height="900"
+        src={homeImage.src}
+        alt={homeImage.alt}
         loading="eager"
         fetchpriority="high"
         decoding="async"
