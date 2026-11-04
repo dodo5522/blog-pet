@@ -46,6 +46,13 @@ export const siteSettingsType = defineType({
       validation: (rule) => rule.required().max(180),
     }),
     defineField({
+      name: "homeImage",
+      title: "トップページ画像",
+      type: "imageWithAlt",
+      description:
+        "トップページの画像です。未設定の場合は既定の猫の画像が表示されます。画像の内容を説明する代替テキストを入力してください。",
+    }),
+    defineField({
       name: "defaultOgImage",
       title: "Default OGP image",
       type: "imageWithAlt",

@@ -104,6 +104,7 @@ export interface SiteSettings {
   siteUrl: string;
   defaultSeoTitle: string;
   defaultSeoDescription: string;
+  homeImage?: SanityImage;
   defaultOgImage?: SanityImage;
   socialLinks: SocialLink[];
   contactUrl?: string;

@@ -5,6 +5,7 @@ export const SITE_SETTINGS_QUERY = `
   siteUrl,
   defaultSeoTitle,
   defaultSeoDescription,
+  homeImage{alt, asset->{url}},
   defaultOgImage{alt, asset->{url}},
   socialLinks[]{label, url},
   contactUrl,
